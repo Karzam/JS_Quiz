@@ -1,72 +1,40 @@
-import React, {Fragment} from 'react'
+import React, { Fragment } from 'react'
 import ReactDOM from 'react-dom'
 import {
-  NavLink,
-  Link,
   BrowserRouter as Router,
   Route,
   Switch,
 } from 'react-router-dom'
+import { ApolloProvider as ApolloHooksProvider } from '@apollo/react-hooks'
 import { ApolloProvider } from 'react-apollo'
 import ApolloClient from 'apollo-boost'
 
-import FeedPage from './components/FeedPage'
-import DraftsPage from './components/DraftsPage'
-import CreatePage from './components/CreatePage'
-import DetailPage from './components/DetailPage'
+import './index.scss'
+import HomeView from './components/views/HomeView/HomeView'
+import QuizView from './components/views/QuizView/QuizView'
 
-import 'tachyons'
-import './index.css'
-
-const client = new ApolloClient({ uri: 'http://localhost:4000' })
+const client = new ApolloClient({ uri: 'https://eu1.prisma.sh/baptiste-menard-24df76/js_quiz/dev' })
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <Router>
-      <Fragment>
-        <nav className="pa3 pa4-ns">
-          <Link
-            className="link dim black b f6 f5-ns dib mr3"
-            to="/"
-            title="Feed"
-          >
-            Blog
-          </Link>
-          <NavLink
-            className="link dim f6 f5-ns dib mr3 black"
-            activeClassName="gray"
-            exact={true}
-            to="/"
-            title="Feed"
-          >
-            Feed
-          </NavLink>
-          <NavLink
-            className="link dim f6 f5-ns dib mr3 black"
-            activeClassName="gray"
-            exact={true}
-            to="/drafts"
-            title="Drafts"
-          >
-            Drafts
-          </NavLink>
-          <Link
-            to="/create"
-            className="f6 link dim br1 ba ph3 pv2 fr mb2 dib black"
-          >
-            + Create Draft
-          </Link>
-        </nav>
-        <div className="fl w-100 pl4 pr4">
-          <Switch>
-            <Route exact path="/" component={FeedPage} />
-            <Route path="/drafts" component={DraftsPage} />
-            <Route path="/create" component={CreatePage} />
-            <Route path="/post/:id" component={DetailPage} />
-          </Switch>
-        </div>
-      </Fragment>
-    </Router>
+    <ApolloHooksProvider client={client}>
+      <Router>
+        <Fragment>
+          <nav>
+            <div className="wrapper">
+              <span className="logo" role="img" aria-label="logo">⚡_</span>
+              <span className="title">js quiz</span>
+            </div>
+          </nav>
+          <div className="view">
+            <Switch>
+              <Route exact path="/" component={HomeView} />
+              <Route exact path="/quiz/:level" component={QuizView} />
+            </Switch>
+          </div>
+        </Fragment>
+      </Router>
+    </ApolloHooksProvider>
   </ApolloProvider>,
   document.getElementById('root'),
 )

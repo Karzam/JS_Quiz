@@ -5,19 +5,21 @@ var typeDefs = require("./prisma-schema").typeDefs;
 
 var models = [
   {
-    name: "Post",
+    name: "Level",
+    embedded: false
+  },
+  {
+    name: "Question",
+    embedded: false
+  },
+  {
+    name: "Answer",
     embedded: false
   }
 ];
 exports.Prisma = prisma_lib_1.makePrismaClientClass({
   typeDefs,
   models,
-  endpoint: `https://eu1.prisma.sh/public-plumegecko-744/js_quiz/dev`
+  endpoint: `https://eu1.prisma.sh/baptiste-menard-24df76/js_quiz/dev`
 });
 exports.prisma = new exports.Prisma();
-var models = [
-  {
-    name: "Post",
-    embedded: false
-  }
-];

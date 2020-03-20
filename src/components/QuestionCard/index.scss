@@ -1,0 +1,27 @@
+.question-card {
+  width: 100%;
+  background-color: white;
+  border: 1px solid white;
+  border-radius: 12px;
+  padding: 24px;
+
+  > * {
+    width: 100%;
+  }
+
+  .title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 16px 0;
+    word-break: keep-all;
+  }
+
+  > span {
+    border-radius: 0 !important;
+  }
+
+  code {
+    font-size: 16px !important;
+    font-weight: 600;
+  }
+}

@@ -1,0 +1,29 @@
+.quiz-view {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  .loader {
+    margin: auto !important;
+  }
+
+  .sup {
+    color: white;
+    font-size: 32px;
+    font-weight: 800;
+    display: flex;
+    justify-content: space-between;
+
+    .countdown {
+      margin-left: auto;
+      margin-bottom: 24px;
+    }
+  }
+
+  .answers {
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: auto auto;
+  }
+}

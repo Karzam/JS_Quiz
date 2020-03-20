@@ -1,6 +1,19 @@
-type Post {
+enum Level {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+type Question {
   id: ID! @id
-  published: Boolean! @default(value: false)
-  title: String!
-  content: String!
+  level: Level! @default(value: BEGINNER)
+  title: String! @unique
+  code: String!
+  answers: [Answer!]! @relation(link: TABLE)
+}
+
+type Answer {
+  id: ID! @id
+  text: String!
+  isCorrect: Boolean! @default(value: false)
 }

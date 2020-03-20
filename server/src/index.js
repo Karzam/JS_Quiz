@@ -3,37 +3,30 @@ const { prisma } = require('./generated/prisma-client')
 
 const resolvers = {
   Query: {
-    feed: (parent, args, context) => {
-      return context.prisma.posts({ where: { published: true } })
+    questions: (parent, args, context) => {
+      return context.prisma.questions()
     },
-    drafts: (parent, args, context) => {
-      return context.prisma.posts({ where: { published: false } })
-    },
-    post: (parent, { id }, context) => {
-      return context.prisma.post({ id })
+    question: (parent, { id }, context) => {
+      return context.prisma.questions({ id })
     },
   },
   Mutation: {
-    createDraft(parent, { title, content }, context) {
-      return context.prisma.createPost({
+    createQuestion(parent, { title, code, level, answers }, context) {
+      return context.prisma.createQuestion({
         title,
-        content,
+        code,
+        level,
+        answers
       })
     },
-    deletePost(parent, { id }, context) {
-      return context.prisma.deletePost({ id })
-    },
-    publish(parent, { id }, context) {
-      return context.prisma.updatePost({
-        where: { id },
-        data: { published: true },
-      })
+    createAnswer(parent, { text }, context) {
+      return context.prisma.createAnswer({ text })
     },
   },
 }
 
 const server = new GraphQLServer({
-  typeDefs: './src/schema.graphql',
+  typeDefs: './src/prisma.graphql',
   resolvers,
   context: {
     prisma,

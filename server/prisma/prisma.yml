@@ -1,5 +1,5 @@
 # Specifies the HTTP endpoint of your Prisma API (deployed to a Prisma Demo server).
-endpoint: https://eu1.prisma.sh/public-plumegecko-744/js_quiz/dev
+endpoint: https://eu1.prisma.sh/baptiste-menard-24df76/js_quiz/dev
 
 # Defines your models, each model is mapped to the database as a table.
 datamodel: datamodel.prisma
@@ -8,9 +8,8 @@ datamodel: datamodel.prisma
 generate:
   - generator: javascript-client
     output: ../src/generated/prisma-client
-
-seed:
-  import: seed.graphql
+  - generator: graphql-schema
+    output: ../src
 
 # Ensures Prisma client is re-generated after a datamodel change.
 hooks:
