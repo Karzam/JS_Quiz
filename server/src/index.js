@@ -9,6 +9,9 @@ const resolvers = {
     question: (parent, { id }, context) => {
       return context.prisma.questions({ id })
     },
+    results: (parent, args, context) => {
+      return context.prisma.results()
+    },
   },
   Mutation: {
     createQuestion(parent, { title, code, level, answers }, context) {
@@ -22,6 +25,10 @@ const resolvers = {
     createAnswer(parent, { text }, context) {
       return context.prisma.createAnswer({ text })
     },
+    sendQuestionsAnswers(parent, args, context) {
+      console.log(args)
+      return context.prisma.results()
+    }
   },
 }
 

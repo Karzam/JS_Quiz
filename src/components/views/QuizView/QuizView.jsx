@@ -1,13 +1,13 @@
-import React, { Fragment, useState, useEffect } from 'react'
-import { useQuery } from '@apollo/react-hooks'
+import React, { useState, useEffect } from 'react'
+import { useQuery, useMutation } from '@apollo/react-hooks'
+import { useHistory } from 'react-router-dom'
 import { gql } from 'apollo-boost'
 import { GridSpinner } from 'react-spinners-kit'
-import QuestionCard from '../../QuestionCard/QuestionCard'
-import AnswerCard from '../../AnswerCard/AnswerCard'
+import QuizProvider from '../../QuizProvider/QuizProvider'
 import './index.scss'
 
 const QuizView = (props) => {
-  const query = gql`
+  const QUESTIONS = gql`
     query questions($level: Level!) {
       questions(where: { level: $level }) {
         id
@@ -22,67 +22,57 @@ const QuizView = (props) => {
     }
   `
 
-  const COUNTDOWN = 20;
+  const CREATE_RESULT = gql`
+    mutation sendQuestionsAnswers($input: [QuestionAnswerInput]!) {
+      sendQuestionsAnswers(data: $input) {
+        id
+      }
+    }
+  `
 
   const Level = {
     beginner: 'BEGINNER',
     intermediate: 'INTERMEDIATE',
     advanced: 'ADVANCED',
   }
+  
+  const history = useHistory()
+  const [transitionAnimation, setTransitionAnimation] = useState('transition')
+  const [createResult, { results }] = useMutation(CREATE_RESULT)
 
-  const [countdown, setCountdown] = useState(COUNTDOWN)
-  const [answers, setAnswers] = useState([])
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (countdown === 0) {
-        return;
+  // Triggers transition animation
+  const onNext = () => {
+    createResult({
+      variables: {
       }
+    })
 
-      setCountdown(countdown => countdown - 1 )
-    }, 1000)
+    setTransitionAnimation('transition')
+  }
 
-    return () => clearInterval(interval)
-  }, [countdown])
+  // When completed, send answers to server and redirect to results
+  const onEnd = () => {
+    history.replace('/results')
+  }
 
-  const { loading, error, data } = useQuery(query, {
+  const { loading, error, data } = useQuery(QUESTIONS, {
     variables: {
       level: Level[props.match.params.level],
     }
   })
-
-  const loader = (
-    <div className="loader">
-      <GridSpinner size={60} color="white" loading={true} />
-    </div>
-  )
   
-  if (!data) {
-    return null
+  if (loading) {
+    return (
+      <div className="loader">
+        <GridSpinner size={60} color="white" loading={true} />
+      </div>
+    )
   }
 
-  const currentQuestion = data.questions[answers.length]
-  const answerCards = currentQuestion.answers.map(answer =>
-    <AnswerCard key={answer.text} props={{ text: answer.text }} />
-  )
-
   return (
-    <div className="quiz-view">
-      { loading && loader }
-      { data && (
-        <Fragment>
-          <div className="sup">
-            <span className="current">{`Question #${answers.length + 1}`}</span>
-            <span className="countdown">{countdown}</span>
-          </div>
-
-          <QuestionCard props={currentQuestion} />
-
-          <div className="answers">
-            {answerCards}
-          </div>
-        </Fragment>
-      )}
+    <div className={`quiz-view ${transitionAnimation}`} onAnimationEnd={() => setTransitionAnimation('')}>
+      { data && <QuizProvider props={{ data, onNext, onEnd }} /> }
     </div>
   )
 }

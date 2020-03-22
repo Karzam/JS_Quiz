@@ -1,12 +1,19 @@
+.loader {
+  display: flex;
+  justify-content: center;
+}
+
+.transition {
+  animation: transition 0.4s forwards;
+}
+
+@keyframes transition {
+  from { transform: scale(0) }
+  to { transform: scale(1) }
+}
+
 .quiz-view {
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-
-  .loader {
-    margin: auto !important;
-  }
 
   .sup {
     color: white;
@@ -19,11 +26,5 @@
       margin-left: auto;
       margin-bottom: 24px;
     }
-  }
-
-  .answers {
-    margin-top: 24px;
-    display: grid;
-    grid-template-columns: auto auto;
   }
 }

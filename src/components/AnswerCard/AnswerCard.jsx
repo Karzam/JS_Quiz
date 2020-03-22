@@ -2,12 +2,12 @@ import React from 'react'
 import './index.scss'
 
 const AnswerCard = ({ props }) => {
-  const { text } = props
+  const { id, text, onClick } = props
 
   return (
-    <div className="answer-card">
+    <button className="answer-card" onClick={() => onClick(id)}>
       <span className="text">{text}</span>
-    </div>
+    </button>
   )
 }
 
