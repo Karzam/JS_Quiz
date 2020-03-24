@@ -1,0 +1,10 @@
+endpoint: https://eu1.prisma.sh/baptiste-menard-24df76/js_quiz/dev
+datamodel: datamodel.prisma
+
+generate:
+  - generator: javascript-client
+    output: ./generated/prisma-client/
+
+hooks:
+  post-deploy:
+    - prisma generate

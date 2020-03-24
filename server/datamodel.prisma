@@ -4,12 +4,6 @@ enum Level {
   ADVANCED
 }
 
-input QuestionAnswerInput {
-  id: ID! @id
-  questionId: Int
-  answerId: Int
-}
-
 type Question {
   id: ID! @id
   level: Level! @default(value: BEGINNER)
@@ -26,14 +20,8 @@ type Answer {
 
 type Result {
   id: ID! @id
-  dateTime: DateTime!
-  question: Question! @relation(link: TABLE)
-  answer: Answer! @relation(link: TABLE)
-}
-
-type User {
-  id: ID! @id
-  email: String!
-  password: String!
-  results: [Result!]! @relation(link: TABLE)
+  dateTime: DateTime
+  question: Question @relation(link: TABLE)
+  givenAnswer: Answer @relation(name: "GivenAnswer", link: TABLE)
+  correctAnswer: Answer @relation(name: "CorrectAnswer", link: TABLE)
 }

@@ -1,4 +1,5 @@
-type AggregateAnswer {
+module.exports = {
+        typeDefs: /* GraphQL */ `type AggregateAnswer {
   count: Int!
 }
 
@@ -7,10 +8,6 @@ type AggregateQuestion {
 }
 
 type AggregateResult {
-  count: Int!
-}
-
-type AggregateUser {
   count: Int!
 }
 
@@ -155,10 +152,12 @@ input AnswerUpdateManyWithWhereNestedInput {
   data: AnswerUpdateManyDataInput!
 }
 
-input AnswerUpdateOneRequiredInput {
+input AnswerUpdateOneInput {
   create: AnswerCreateInput
   update: AnswerUpdateDataInput
   upsert: AnswerUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
   connect: AnswerWhereUniqueInput
 }
 
@@ -251,12 +250,6 @@ type Mutation {
   upsertResult(where: ResultWhereUniqueInput!, create: ResultCreateInput!, update: ResultUpdateInput!): Result!
   deleteResult(where: ResultWhereUniqueInput!): Result
   deleteManyResults(where: ResultWhereInput): BatchPayload!
-  createUser(data: UserCreateInput!): User!
-  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
-  updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
-  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
-  deleteUser(where: UserWhereUniqueInput!): User
-  deleteManyUsers(where: UserWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -286,9 +279,6 @@ type Query {
   result(where: ResultWhereUniqueInput!): Result
   results(where: ResultWhereInput, orderBy: ResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Result]!
   resultsConnection(where: ResultWhereInput, orderBy: ResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ResultConnection!
-  user(where: UserWhereUniqueInput!): User
-  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
-  usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   node(id: ID!): Node
 }
 
@@ -383,10 +373,12 @@ input QuestionUpdateManyMutationInput {
   code: String
 }
 
-input QuestionUpdateOneRequiredInput {
+input QuestionUpdateOneInput {
   create: QuestionCreateInput
   update: QuestionUpdateDataInput
   upsert: QuestionUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
   connect: QuestionWhereUniqueInput
 }
 
@@ -457,9 +449,10 @@ input QuestionWhereUniqueInput {
 
 type Result {
   id: ID!
-  dateTime: DateTime!
-  question: Question!
-  answer: Answer!
+  dateTime: DateTime
+  question: Question
+  givenAnswer: Answer
+  correctAnswer: Answer
 }
 
 type ResultConnection {
@@ -469,14 +462,10 @@ type ResultConnection {
 }
 
 input ResultCreateInput {
-  dateTime: DateTime!
-  question: QuestionCreateOneInput!
-  answer: AnswerCreateOneInput!
-}
-
-input ResultCreateManyInput {
-  create: [ResultCreateInput!]
-  connect: [ResultWhereUniqueInput!]
+  dateTime: DateTime
+  question: QuestionCreateOneInput
+  givenAnswer: AnswerCreateOneInput
+  correctAnswer: AnswerCreateOneInput
 }
 
 type ResultEdge {
@@ -497,35 +486,7 @@ enum ResultOrderByInput {
 
 type ResultPreviousValues {
   id: ID!
-  dateTime: DateTime!
-}
-
-input ResultScalarWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
   dateTime: DateTime
-  dateTime_not: DateTime
-  dateTime_in: [DateTime!]
-  dateTime_not_in: [DateTime!]
-  dateTime_lt: DateTime
-  dateTime_lte: DateTime
-  dateTime_gt: DateTime
-  dateTime_gte: DateTime
-  AND: [ResultScalarWhereInput!]
-  OR: [ResultScalarWhereInput!]
-  NOT: [ResultScalarWhereInput!]
 }
 
 type ResultSubscriptionPayload {
@@ -546,51 +507,15 @@ input ResultSubscriptionWhereInput {
   NOT: [ResultSubscriptionWhereInput!]
 }
 
-input ResultUpdateDataInput {
-  dateTime: DateTime
-  question: QuestionUpdateOneRequiredInput
-  answer: AnswerUpdateOneRequiredInput
-}
-
 input ResultUpdateInput {
   dateTime: DateTime
-  question: QuestionUpdateOneRequiredInput
-  answer: AnswerUpdateOneRequiredInput
-}
-
-input ResultUpdateManyDataInput {
-  dateTime: DateTime
-}
-
-input ResultUpdateManyInput {
-  create: [ResultCreateInput!]
-  update: [ResultUpdateWithWhereUniqueNestedInput!]
-  upsert: [ResultUpsertWithWhereUniqueNestedInput!]
-  delete: [ResultWhereUniqueInput!]
-  connect: [ResultWhereUniqueInput!]
-  disconnect: [ResultWhereUniqueInput!]
-  deleteMany: [ResultScalarWhereInput!]
-  updateMany: [ResultUpdateManyWithWhereNestedInput!]
+  question: QuestionUpdateOneInput
+  givenAnswer: AnswerUpdateOneInput
+  correctAnswer: AnswerUpdateOneInput
 }
 
 input ResultUpdateManyMutationInput {
   dateTime: DateTime
-}
-
-input ResultUpdateManyWithWhereNestedInput {
-  where: ResultScalarWhereInput!
-  data: ResultUpdateManyDataInput!
-}
-
-input ResultUpdateWithWhereUniqueNestedInput {
-  where: ResultWhereUniqueInput!
-  data: ResultUpdateDataInput!
-}
-
-input ResultUpsertWithWhereUniqueNestedInput {
-  where: ResultWhereUniqueInput!
-  update: ResultUpdateDataInput!
-  create: ResultCreateInput!
 }
 
 input ResultWhereInput {
@@ -617,7 +542,8 @@ input ResultWhereInput {
   dateTime_gt: DateTime
   dateTime_gte: DateTime
   question: QuestionWhereInput
-  answer: AnswerWhereInput
+  givenAnswer: AnswerWhereInput
+  correctAnswer: AnswerWhereInput
   AND: [ResultWhereInput!]
   OR: [ResultWhereInput!]
   NOT: [ResultWhereInput!]
@@ -631,132 +557,7 @@ type Subscription {
   answer(where: AnswerSubscriptionWhereInput): AnswerSubscriptionPayload
   question(where: QuestionSubscriptionWhereInput): QuestionSubscriptionPayload
   result(where: ResultSubscriptionWhereInput): ResultSubscriptionPayload
-  user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
-
-type User {
-  id: ID!
-  email: String!
-  password: String!
-  results(where: ResultWhereInput, orderBy: ResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Result!]
-}
-
-type UserConnection {
-  pageInfo: PageInfo!
-  edges: [UserEdge]!
-  aggregate: AggregateUser!
-}
-
-input UserCreateInput {
-  email: String!
-  password: String!
-  results: ResultCreateManyInput
-}
-
-type UserEdge {
-  node: User!
-  cursor: String!
-}
-
-enum UserOrderByInput {
-  id_ASC
-  id_DESC
-  email_ASC
-  email_DESC
-  password_ASC
-  password_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-
-type UserPreviousValues {
-  id: ID!
-  email: String!
-  password: String!
-}
-
-type UserSubscriptionPayload {
-  mutation: MutationType!
-  node: User
-  updatedFields: [String!]
-  previousValues: UserPreviousValues
-}
-
-input UserSubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: UserWhereInput
-  AND: [UserSubscriptionWhereInput!]
-  OR: [UserSubscriptionWhereInput!]
-  NOT: [UserSubscriptionWhereInput!]
-}
-
-input UserUpdateInput {
-  email: String
-  password: String
-  results: ResultUpdateManyInput
-}
-
-input UserUpdateManyMutationInput {
-  email: String
-  password: String
-}
-
-input UserWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  email: String
-  email_not: String
-  email_in: [String!]
-  email_not_in: [String!]
-  email_lt: String
-  email_lte: String
-  email_gt: String
-  email_gte: String
-  email_contains: String
-  email_not_contains: String
-  email_starts_with: String
-  email_not_starts_with: String
-  email_ends_with: String
-  email_not_ends_with: String
-  password: String
-  password_not: String
-  password_in: [String!]
-  password_not_in: [String!]
-  password_lt: String
-  password_lte: String
-  password_gt: String
-  password_gte: String
-  password_contains: String
-  password_not_contains: String
-  password_starts_with: String
-  password_not_starts_with: String
-  password_ends_with: String
-  password_not_ends_with: String
-  results_every: ResultWhereInput
-  results_some: ResultWhereInput
-  results_none: ResultWhereInput
-  AND: [UserWhereInput!]
-  OR: [UserWhereInput!]
-  NOT: [UserWhereInput!]
-}
-
-input UserWhereUniqueInput {
-  id: ID
-}
+`
+      }
+    

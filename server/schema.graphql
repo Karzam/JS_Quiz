@@ -1,0 +1,42 @@
+scalar DateTime
+
+enum Level {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+type Question {
+  id: ID!
+  level: Level!
+  title: String!
+  code: String!
+  answers: [Answer!]!
+}
+
+type Answer {
+  id: ID!
+  text: String!
+  isCorrect: Boolean!
+}
+
+input AnswerInput {
+  id: ID!
+}
+
+type Result {
+  id: ID!
+  dateTime: DateTime
+  question: Question
+  givenAnswer: Answer
+  correctAnswer: Answer
+}
+
+type Query {
+  questions: [Question]!
+  answers: [Answer]!
+}
+
+type Mutation {
+  sendQuestionsAnswers(data: [AnswerInput!]): [Result!]!
+}
