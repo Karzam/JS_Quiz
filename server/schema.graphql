@@ -20,23 +20,34 @@ type Answer {
   isCorrect: Boolean!
 }
 
-input AnswerInput {
-  id: ID!
+input ResultInput {
+  questionId: ID!
+  answerId: ID
 }
 
 type Result {
   id: ID!
-  dateTime: DateTime
-  question: Question
-  givenAnswer: Answer
+  userId: ID!
+  dateTime: DateTime!
+  question: Question!
+  answer: Answer
   correctAnswer: Answer
 }
 
+type User {
+  id: ID!
+  email: String!
+  password: String!
+}
+
 type Query {
-  questions: [Question]!
-  answers: [Answer]!
+  questions(level: Level): [Question]!
+  question(id: ID!): Question
+  answer(id: ID!): Answer
+  results: [Result!]
+  result(id: ID!): Result
 }
 
 type Mutation {
-  sendQuestionsAnswers(data: [AnswerInput!]): [Result!]!
+  createResults(data: [ResultInput!]!): [Result!]!
 }

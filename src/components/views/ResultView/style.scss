@@ -1,0 +1,31 @@
+.result-view {
+  height: 100%;
+
+  .sup {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .score {
+      color: white;
+      font-size: 36px;
+      font-weight: 800;
+      margin-bottom: 36px;
+
+      > :first-child {
+        margin-right: 10px;
+      }
+    }
+
+    .link {
+      color: white;
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 36px;
+
+      > :first-child {
+        margin-right: 10px;
+      }
+    }
+  }
+}

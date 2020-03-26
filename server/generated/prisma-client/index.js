@@ -5,10 +5,6 @@ var typeDefs = require("./prisma-schema").typeDefs;
 
 var models = [
   {
-    name: "Answer",
-    embedded: false
-  },
-  {
     name: "Level",
     embedded: false
   },
@@ -17,7 +13,15 @@ var models = [
     embedded: false
   },
   {
+    name: "Answer",
+    embedded: false
+  },
+  {
     name: "Result",
+    embedded: false
+  },
+  {
+    name: "User",
     embedded: false
   }
 ];
@@ -27,21 +31,3 @@ exports.Prisma = prisma_lib_1.makePrismaClientClass({
   endpoint: `https://eu1.prisma.sh/baptiste-menard-24df76/js_quiz/dev`
 });
 exports.prisma = new exports.Prisma();
-var models = [
-  {
-    name: "Answer",
-    embedded: false
-  },
-  {
-    name: "Level",
-    embedded: false
-  },
-  {
-    name: "Question",
-    embedded: false
-  },
-  {
-    name: "Result",
-    embedded: false
-  }
-];

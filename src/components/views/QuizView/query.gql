@@ -1,0 +1,12 @@
+query questions($level: Level!) {
+  questions(level: $level) {
+    id
+    level
+    title
+    code
+    answers {
+      id
+      text
+    }
+  }
+}

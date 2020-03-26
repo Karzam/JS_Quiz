@@ -20,8 +20,14 @@ type Answer {
 
 type Result {
   id: ID! @id
-  dateTime: DateTime
-  question: Question @relation(link: TABLE)
-  givenAnswer: Answer @relation(name: "GivenAnswer", link: TABLE)
-  correctAnswer: Answer @relation(name: "CorrectAnswer", link: TABLE)
+  userId: ID!
+  dateTime: DateTime!
+  question: Question! @relation(link: TABLE)
+  answer: Answer @relation(link: TABLE)
+}
+
+type User {
+  id: ID! @id
+  email: String! @unique
+  password: String!
 }

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import './index.scss'
+import './style.scss'
 
 const HomeView = () => {
   const levels = [{
@@ -23,17 +23,17 @@ const HomeView = () => {
   }]
 
   const buttons = levels.map(l =>
-    <Link key={l.label} className="level" to={{ pathname: `quiz/${l.path}`, level: l.path }}>
-      <span className="icon" role="img" aria-label="emoji">{l.icon}</span>
-      <span className="label">{l.label}</span>
-      <p className="description">{l.description}</p>
+    <Link key={ l.label } className="level" to={{ pathname: `quiz/${l.path}`, level: l.path }}>
+      <span className="icon" role="img" aria-label="emoji">{ l.icon }</span>
+      <span className="label">{ l.label }</span>
+      <p className="description">{ l.description }</p>
     </Link>
   )
   
   return (
     <div className="home-view">
       <div className="wrapper">
-        <span className="title">Select a difficulty level</span>
+        <span className="title">{ 'Select a difficulty level:' }</span>
 
         <div className="buttons">
           { buttons }

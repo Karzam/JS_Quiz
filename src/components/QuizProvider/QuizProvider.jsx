@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import QuestionCard from '../QuestionCard/QuestionCard'
 import AnswerCard from '../AnswerCard/AnswerCard'
-import './index.scss'
+import './style.scss'
 
 const QuizProvider = ({ props }) => {
   const { data, onNext, onEnd } = props
@@ -15,7 +15,7 @@ const QuizProvider = ({ props }) => {
   useEffect(() => {
     // If quiz has been completed, triggers redirection to results
     if (answers.length === QUESTION_NB) {
-      onEnd()
+      onEnd(answers)
     }
 
     // Set null answer if countdown is over, or update value
@@ -48,20 +48,20 @@ const QuizProvider = ({ props }) => {
   }
 
   const answerCards = currentQuestion.answers.map(answer =>
-    <AnswerCard key={answer.text} props={{ id: answer.id, text: answer.text, onClick: onAnswer }} />
+    <AnswerCard key={ answer.text } props={{ id: answer.id, text: answer.text, onClick: onAnswer }} />
   )
 
   return (
     <Fragment>
       <div className="sup">
         <span>{`Question #${answers.length + 1}`}</span>
-        <span className="countdown">{countdown}</span>
+        <span className="countdown">{ countdown }</span>
       </div>
 
-      <QuestionCard props={currentQuestion} />
+      <QuestionCard props={ currentQuestion } />
 
       <div className="answers">
-        {answerCards}
+        { answerCards }
       </div>
     </Fragment>
   )

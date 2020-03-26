@@ -1,0 +1,21 @@
+@import '../../styles/_mixins';
+
+.question-card {
+  @include card;
+  width: 100%;
+
+  > * {
+    width: 100%;
+  }
+
+  .title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 16px 0;
+    word-break: keep-all;
+  }
+
+  code {
+    font-size: 14px !important;
+  }
+}

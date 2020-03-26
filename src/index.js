@@ -1,19 +1,17 @@
 import React, { Fragment } from 'react'
 import ReactDOM from 'react-dom'
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-} from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom'
 import { ApolloProvider as ApolloHooksProvider } from '@apollo/react-hooks'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCode } from '@fortawesome/free-solid-svg-icons'
 import { ApolloProvider } from 'react-apollo'
 import ApolloClient from 'apollo-boost'
-
-import './index.scss'
 import HomeView from './components/views/HomeView/HomeView'
 import QuizView from './components/views/QuizView/QuizView'
+import ResultView from './components/views/ResultView/ResultView'
+import './index.scss'
 
-const client = new ApolloClient({ uri: 'https://eu1.prisma.sh/baptiste-menard-24df76/js_quiz/dev' })
+const client = new ApolloClient({ uri: 'http://localhost:4000' })
 
 ReactDOM.render(
   <ApolloProvider client={client}>
@@ -21,15 +19,16 @@ ReactDOM.render(
       <Router>
         <Fragment>
           <nav>
-            <div className="wrapper">
-              <span className="logo" role="img" aria-label="logo">⚡_</span>
-              <span className="title">js quiz</span>
-            </div>
+            <Link className="wrapper" to={{ pathname: '/' }}>
+              <FontAwesomeIcon className="icon" icon={faCode} />
+              <span className="title">JS Quiz</span>
+            </Link>
           </nav>
           <div className="view">
             <Switch>
               <Route exact path="/" component={HomeView} />
-              <Route exact path="/quiz/:level" component={QuizView} />
+              <Route path="/quiz/:level" component={QuizView} />
+              <Route path="/result" component={ResultView} />
             </Switch>
           </div>
         </Fragment>

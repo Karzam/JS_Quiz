@@ -1,0 +1,19 @@
+mutation createResults($input: [ResultInput!]!) {
+  createResults(data: $input) {
+    id
+    question {
+      id
+      title
+      code
+    }
+    answer {
+      id
+      text
+      isCorrect
+    }
+    correctAnswer {
+      id
+      text
+    }
+  }
+}
