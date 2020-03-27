@@ -7,7 +7,7 @@ enum Level {
 type Question {
   id: ID! @id
   level: Level! @default(value: BEGINNER)
-  title: String! @unique
+  title: String!
   code: String!
   answers: [Answer!]! @relation(link: TABLE)
 }

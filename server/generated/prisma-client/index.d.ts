@@ -298,7 +298,6 @@ export interface AnswerWhereInput {
 
 export type QuestionWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
-  title?: Maybe<String>;
 }>;
 
 export interface QuestionWhereInput {

@@ -454,7 +454,6 @@ input QuestionWhereInput {
 
 input QuestionWhereUniqueInput {
   id: ID
-  title: String
 }
 
 type Result {
