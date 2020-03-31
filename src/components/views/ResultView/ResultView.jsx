@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import ResultCard from '../../ResultCard/ResultCard'
+import ResultCard from '../../common/ResultCard/ResultCard'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHome, faTrophy } from '@fortawesome/free-solid-svg-icons'
 import './style.scss'

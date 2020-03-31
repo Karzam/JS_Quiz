@@ -3,7 +3,6 @@ const { GraphQLServer } = require('graphql-yoga')
 const { authenticate } = require('./middlewares/authenticate')
 const { newToken, extractTokenFromHeaders, decodeToken } = require('./utils/jwt')
 const { requestGithubUser } = require('./utils/requestGithubUser')
-const jwt = require('jsonwebtoken')
 
 require('dotenv').config()
 
@@ -26,6 +25,16 @@ const FRAGMENT_QUESTION = `
 
 const resolvers = {
   Query: {
+    me(root, args, { prisma, req }) {
+      try {
+        const token = extractTokenFromHeaders(req.headers)
+        const { user } = decodeToken(token)
+
+        return prisma.user({ email: user.email })
+      } catch (error) {
+        throw new Error(error)
+      }
+    },
     questions(root, args, { prisma }) {
       const level = args.level || 'INTERMEDIATE'
 

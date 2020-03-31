@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import { useHistory } from 'react-router-dom'
 import { GridSpinner } from 'react-spinners-kit'
-import QuizProvider from '../../QuizProvider/QuizProvider'
+import QuizProvider from '../../common/QuizProvider/QuizProvider'
 import { loader } from 'graphql.macro'
 import './style.scss'
 

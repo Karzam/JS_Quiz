@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600,800');
-@import './styles/colors';
+@import '../../styles/colors';
 
 body {
   height: 100%;
@@ -28,12 +28,15 @@ html {
 }
 
 nav {
-  padding: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 24px auto;
+  width: 80%;
 
   .wrapper {
     display: block;
     max-width: 840px;
-    margin: auto;
     font-weight: 800;
     font-size: 40px;
     color: white;

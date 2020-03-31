@@ -24,7 +24,7 @@ const RedirectView = () => {
 
     Auth.set(res.data.authorize.token)
 
-    return history.replace('/home')
+    return history.replace('/')
   }
 
   if (!called) {

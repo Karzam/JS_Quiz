@@ -47,6 +47,7 @@ type AuthPayload {
 }
 
 type Query {
+  me: User
   questions(level: Level): [Question]!
   question(id: ID!): Question
   answer(id: ID!): Answer
