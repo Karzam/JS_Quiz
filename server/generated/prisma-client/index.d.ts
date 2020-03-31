@@ -222,9 +222,7 @@ export type AnswerOrderByInput =
   | "id_ASC"
   | "id_DESC"
   | "text_ASC"
-  | "text_DESC"
-  | "isCorrect_ASC"
-  | "isCorrect_DESC";
+  | "text_DESC";
 
 export type Level = "BEGINNER" | "INTERMEDIATE" | "ADVANCED";
 
@@ -251,8 +249,10 @@ export type UserOrderByInput =
   | "id_DESC"
   | "email_ASC"
   | "email_DESC"
-  | "password_ASC"
-  | "password_DESC";
+  | "name_ASC"
+  | "name_DESC"
+  | "avatar_ASC"
+  | "avatar_DESC";
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
@@ -289,8 +289,6 @@ export interface AnswerWhereInput {
   text_not_starts_with?: Maybe<String>;
   text_ends_with?: Maybe<String>;
   text_not_ends_with?: Maybe<String>;
-  isCorrect?: Maybe<Boolean>;
-  isCorrect_not?: Maybe<Boolean>;
   AND?: Maybe<AnswerWhereInput[] | AnswerWhereInput>;
   OR?: Maybe<AnswerWhereInput[] | AnswerWhereInput>;
   NOT?: Maybe<AnswerWhereInput[] | AnswerWhereInput>;
@@ -350,6 +348,7 @@ export interface QuestionWhereInput {
   answers_every?: Maybe<AnswerWhereInput>;
   answers_some?: Maybe<AnswerWhereInput>;
   answers_none?: Maybe<AnswerWhereInput>;
+  correctAnswer?: Maybe<AnswerWhereInput>;
   AND?: Maybe<QuestionWhereInput[] | QuestionWhereInput>;
   OR?: Maybe<QuestionWhereInput[] | QuestionWhereInput>;
   NOT?: Maybe<QuestionWhereInput[] | QuestionWhereInput>;
@@ -437,20 +436,34 @@ export interface UserWhereInput {
   email_not_starts_with?: Maybe<String>;
   email_ends_with?: Maybe<String>;
   email_not_ends_with?: Maybe<String>;
-  password?: Maybe<String>;
-  password_not?: Maybe<String>;
-  password_in?: Maybe<String[] | String>;
-  password_not_in?: Maybe<String[] | String>;
-  password_lt?: Maybe<String>;
-  password_lte?: Maybe<String>;
-  password_gt?: Maybe<String>;
-  password_gte?: Maybe<String>;
-  password_contains?: Maybe<String>;
-  password_not_contains?: Maybe<String>;
-  password_starts_with?: Maybe<String>;
-  password_not_starts_with?: Maybe<String>;
-  password_ends_with?: Maybe<String>;
-  password_not_ends_with?: Maybe<String>;
+  name?: Maybe<String>;
+  name_not?: Maybe<String>;
+  name_in?: Maybe<String[] | String>;
+  name_not_in?: Maybe<String[] | String>;
+  name_lt?: Maybe<String>;
+  name_lte?: Maybe<String>;
+  name_gt?: Maybe<String>;
+  name_gte?: Maybe<String>;
+  name_contains?: Maybe<String>;
+  name_not_contains?: Maybe<String>;
+  name_starts_with?: Maybe<String>;
+  name_not_starts_with?: Maybe<String>;
+  name_ends_with?: Maybe<String>;
+  name_not_ends_with?: Maybe<String>;
+  avatar?: Maybe<String>;
+  avatar_not?: Maybe<String>;
+  avatar_in?: Maybe<String[] | String>;
+  avatar_not_in?: Maybe<String[] | String>;
+  avatar_lt?: Maybe<String>;
+  avatar_lte?: Maybe<String>;
+  avatar_gt?: Maybe<String>;
+  avatar_gte?: Maybe<String>;
+  avatar_contains?: Maybe<String>;
+  avatar_not_contains?: Maybe<String>;
+  avatar_starts_with?: Maybe<String>;
+  avatar_not_starts_with?: Maybe<String>;
+  avatar_ends_with?: Maybe<String>;
+  avatar_not_ends_with?: Maybe<String>;
   AND?: Maybe<UserWhereInput[] | UserWhereInput>;
   OR?: Maybe<UserWhereInput[] | UserWhereInput>;
   NOT?: Maybe<UserWhereInput[] | UserWhereInput>;
@@ -459,17 +472,14 @@ export interface UserWhereInput {
 export interface AnswerCreateInput {
   id?: Maybe<ID_Input>;
   text: String;
-  isCorrect?: Maybe<Boolean>;
 }
 
 export interface AnswerUpdateInput {
   text?: Maybe<String>;
-  isCorrect?: Maybe<Boolean>;
 }
 
 export interface AnswerUpdateManyMutationInput {
   text?: Maybe<String>;
-  isCorrect?: Maybe<Boolean>;
 }
 
 export interface QuestionCreateInput {
@@ -478,6 +488,7 @@ export interface QuestionCreateInput {
   title: String;
   code: String;
   answers?: Maybe<AnswerCreateManyInput>;
+  correctAnswer: AnswerCreateOneInput;
 }
 
 export interface AnswerCreateManyInput {
@@ -485,11 +496,17 @@ export interface AnswerCreateManyInput {
   connect?: Maybe<AnswerWhereUniqueInput[] | AnswerWhereUniqueInput>;
 }
 
+export interface AnswerCreateOneInput {
+  create?: Maybe<AnswerCreateInput>;
+  connect?: Maybe<AnswerWhereUniqueInput>;
+}
+
 export interface QuestionUpdateInput {
   level?: Maybe<Level>;
   title?: Maybe<String>;
   code?: Maybe<String>;
   answers?: Maybe<AnswerUpdateManyInput>;
+  correctAnswer?: Maybe<AnswerUpdateOneRequiredInput>;
 }
 
 export interface AnswerUpdateManyInput {
@@ -520,7 +537,6 @@ export interface AnswerUpdateWithWhereUniqueNestedInput {
 
 export interface AnswerUpdateDataInput {
   text?: Maybe<String>;
-  isCorrect?: Maybe<Boolean>;
 }
 
 export interface AnswerUpsertWithWhereUniqueNestedInput {
@@ -558,8 +574,6 @@ export interface AnswerScalarWhereInput {
   text_not_starts_with?: Maybe<String>;
   text_ends_with?: Maybe<String>;
   text_not_ends_with?: Maybe<String>;
-  isCorrect?: Maybe<Boolean>;
-  isCorrect_not?: Maybe<Boolean>;
   AND?: Maybe<AnswerScalarWhereInput[] | AnswerScalarWhereInput>;
   OR?: Maybe<AnswerScalarWhereInput[] | AnswerScalarWhereInput>;
   NOT?: Maybe<AnswerScalarWhereInput[] | AnswerScalarWhereInput>;
@@ -572,7 +586,18 @@ export interface AnswerUpdateManyWithWhereNestedInput {
 
 export interface AnswerUpdateManyDataInput {
   text?: Maybe<String>;
-  isCorrect?: Maybe<Boolean>;
+}
+
+export interface AnswerUpdateOneRequiredInput {
+  create?: Maybe<AnswerCreateInput>;
+  update?: Maybe<AnswerUpdateDataInput>;
+  upsert?: Maybe<AnswerUpsertNestedInput>;
+  connect?: Maybe<AnswerWhereUniqueInput>;
+}
+
+export interface AnswerUpsertNestedInput {
+  update: AnswerUpdateDataInput;
+  create: AnswerCreateInput;
 }
 
 export interface QuestionUpdateManyMutationInput {
@@ -594,11 +619,6 @@ export interface QuestionCreateOneInput {
   connect?: Maybe<QuestionWhereUniqueInput>;
 }
 
-export interface AnswerCreateOneInput {
-  create?: Maybe<AnswerCreateInput>;
-  connect?: Maybe<AnswerWhereUniqueInput>;
-}
-
 export interface ResultUpdateInput {
   userId?: Maybe<ID_Input>;
   dateTime?: Maybe<DateTimeInput>;
@@ -618,6 +638,7 @@ export interface QuestionUpdateDataInput {
   title?: Maybe<String>;
   code?: Maybe<String>;
   answers?: Maybe<AnswerUpdateManyInput>;
+  correctAnswer?: Maybe<AnswerUpdateOneRequiredInput>;
 }
 
 export interface QuestionUpsertNestedInput {
@@ -634,11 +655,6 @@ export interface AnswerUpdateOneInput {
   connect?: Maybe<AnswerWhereUniqueInput>;
 }
 
-export interface AnswerUpsertNestedInput {
-  update: AnswerUpdateDataInput;
-  create: AnswerCreateInput;
-}
-
 export interface ResultUpdateManyMutationInput {
   userId?: Maybe<ID_Input>;
   dateTime?: Maybe<DateTimeInput>;
@@ -647,17 +663,20 @@ export interface ResultUpdateManyMutationInput {
 export interface UserCreateInput {
   id?: Maybe<ID_Input>;
   email: String;
-  password: String;
+  name: String;
+  avatar: String;
 }
 
 export interface UserUpdateInput {
   email?: Maybe<String>;
-  password?: Maybe<String>;
+  name?: Maybe<String>;
+  avatar?: Maybe<String>;
 }
 
 export interface UserUpdateManyMutationInput {
   email?: Maybe<String>;
-  password?: Maybe<String>;
+  name?: Maybe<String>;
+  avatar?: Maybe<String>;
 }
 
 export interface AnswerSubscriptionWhereInput {
@@ -715,13 +734,11 @@ export interface NodeNode {
 export interface Answer {
   id: ID_Output;
   text: String;
-  isCorrect: Boolean;
 }
 
 export interface AnswerPromise extends Promise<Answer>, Fragmentable {
   id: () => Promise<ID_Output>;
   text: () => Promise<String>;
-  isCorrect: () => Promise<Boolean>;
 }
 
 export interface AnswerSubscription
@@ -729,7 +746,6 @@ export interface AnswerSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   text: () => Promise<AsyncIterator<String>>;
-  isCorrect: () => Promise<AsyncIterator<Boolean>>;
 }
 
 export interface AnswerNullablePromise
@@ -737,7 +753,6 @@ export interface AnswerNullablePromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   text: () => Promise<String>;
-  isCorrect: () => Promise<Boolean>;
 }
 
 export interface AnswerConnection {
@@ -838,6 +853,7 @@ export interface QuestionPromise extends Promise<Question>, Fragmentable {
     first?: Int;
     last?: Int;
   }) => T;
+  correctAnswer: <T = AnswerPromise>() => T;
 }
 
 export interface QuestionSubscription
@@ -856,6 +872,7 @@ export interface QuestionSubscription
     first?: Int;
     last?: Int;
   }) => T;
+  correctAnswer: <T = AnswerSubscription>() => T;
 }
 
 export interface QuestionNullablePromise
@@ -874,6 +891,7 @@ export interface QuestionNullablePromise
     first?: Int;
     last?: Int;
   }) => T;
+  correctAnswer: <T = AnswerPromise>() => T;
 }
 
 export interface QuestionConnection {
@@ -1023,13 +1041,15 @@ export interface AggregateResultSubscription
 export interface User {
   id: ID_Output;
   email: String;
-  password: String;
+  name: String;
+  avatar: String;
 }
 
 export interface UserPromise extends Promise<User>, Fragmentable {
   id: () => Promise<ID_Output>;
   email: () => Promise<String>;
-  password: () => Promise<String>;
+  name: () => Promise<String>;
+  avatar: () => Promise<String>;
 }
 
 export interface UserSubscription
@@ -1037,7 +1057,8 @@ export interface UserSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   email: () => Promise<AsyncIterator<String>>;
-  password: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
+  avatar: () => Promise<AsyncIterator<String>>;
 }
 
 export interface UserNullablePromise
@@ -1045,7 +1066,8 @@ export interface UserNullablePromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   email: () => Promise<String>;
-  password: () => Promise<String>;
+  name: () => Promise<String>;
+  avatar: () => Promise<String>;
 }
 
 export interface UserConnection {
@@ -1146,7 +1168,6 @@ export interface AnswerSubscriptionPayloadSubscription
 export interface AnswerPreviousValues {
   id: ID_Output;
   text: String;
-  isCorrect: Boolean;
 }
 
 export interface AnswerPreviousValuesPromise
@@ -1154,7 +1175,6 @@ export interface AnswerPreviousValuesPromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   text: () => Promise<String>;
-  isCorrect: () => Promise<Boolean>;
 }
 
 export interface AnswerPreviousValuesSubscription
@@ -1162,7 +1182,6 @@ export interface AnswerPreviousValuesSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   text: () => Promise<AsyncIterator<String>>;
-  isCorrect: () => Promise<AsyncIterator<Boolean>>;
 }
 
 export interface QuestionSubscriptionPayload {
@@ -1290,7 +1309,8 @@ export interface UserSubscriptionPayloadSubscription
 export interface UserPreviousValues {
   id: ID_Output;
   email: String;
-  password: String;
+  name: String;
+  avatar: String;
 }
 
 export interface UserPreviousValuesPromise
@@ -1298,7 +1318,8 @@ export interface UserPreviousValuesPromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   email: () => Promise<String>;
-  password: () => Promise<String>;
+  name: () => Promise<String>;
+  avatar: () => Promise<String>;
 }
 
 export interface UserPreviousValuesSubscription
@@ -1306,7 +1327,8 @@ export interface UserPreviousValuesSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   email: () => Promise<AsyncIterator<String>>;
-  password: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
+  avatar: () => Promise<AsyncIterator<String>>;
 }
 
 /*
@@ -1321,14 +1343,14 @@ The `String` scalar type represents textual data, represented as UTF-8 character
 export type String = string;
 
 /*
-The `Boolean` scalar type represents `true` or `false`.
-*/
-export type Boolean = boolean;
-
-/*
 The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
 */
 export type Int = number;
+
+/*
+The `Boolean` scalar type represents `true` or `false`.
+*/
+export type Boolean = boolean;
 
 /*
 DateTime scalar input type, allowing Date

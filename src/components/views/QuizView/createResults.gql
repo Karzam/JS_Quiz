@@ -9,7 +9,6 @@ mutation createResults($input: [ResultInput!]!) {
     answer {
       id
       text
-      isCorrect
     }
     correctAnswer {
       id

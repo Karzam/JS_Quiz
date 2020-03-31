@@ -12,12 +12,12 @@ type Question {
   title: String!
   code: String!
   answers: [Answer!]!
+  correctAnswer: Answer!
 }
 
 type Answer {
   id: ID!
   text: String!
-  isCorrect: Boolean!
 }
 
 input ResultInput {
@@ -37,7 +37,13 @@ type Result {
 type User {
   id: ID!
   email: String!
-  password: String!
+  name: String!
+  avatar: String!
+}
+
+type AuthPayload {
+  user: User!
+  token: String!
 }
 
 type Query {
@@ -46,8 +52,10 @@ type Query {
   answer(id: ID!): Answer
   results: [Result!]
   result(id: ID!): Result
+  user(email: String!): User
 }
 
 type Mutation {
   createResults(data: [ResultInput!]!): [Result!]!
+  authorize(code: String!): AuthPayload!
 }

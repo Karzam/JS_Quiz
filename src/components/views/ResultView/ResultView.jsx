@@ -9,7 +9,7 @@ const ResultView = ({ location }) => {
   const results = location.state.results
 
   const questionsCount = results.length
-  const correctAnswersCount = results.filter(r => r.answer && r.answer.isCorrect).length
+  const correctAnswersCount = results.filter(r => r.answer && r.answer.id === r.correctAnswer.id).length
 
   const resultCards = results.map((result, index) =>
     <ResultCard key={ result.id } props={{ index: index + 1, ...result }} />

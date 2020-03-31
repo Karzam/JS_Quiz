@@ -6,12 +6,28 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCode } from '@fortawesome/free-solid-svg-icons'
 import { ApolloProvider } from 'react-apollo'
 import ApolloClient from 'apollo-boost'
+import Auth from './utils/auth'
 import HomeView from './components/views/HomeView/HomeView'
+import LevelView from './components/views/LevelView/LevelView'
 import QuizView from './components/views/QuizView/QuizView'
+import RedirectView from './components/views/RedirectView/RedirectView'
 import ResultView from './components/views/ResultView/ResultView'
 import './index.scss'
 
-const client = new ApolloClient({ uri: 'http://localhost:4000' })
+require('dotenv').config()
+
+const authToken = Auth.get()
+
+const client = new ApolloClient({
+  uri: 'http://localhost:4000',
+  request: (operation) => {
+    operation.setContext({
+      headers: {
+        authorization: authToken ? `Bearer ${authToken}` : ''
+      }
+    })
+  }
+})
 
 ReactDOM.render(
   <ApolloProvider client={client}>
@@ -27,8 +43,10 @@ ReactDOM.render(
           <div className="view">
             <Switch>
               <Route exact path="/" component={HomeView} />
-              <Route path="/quiz/:level" component={QuizView} />
-              <Route path="/result" component={ResultView} />
+              <Route exact path="/auth" component={RedirectView} />
+              <Route exact path="/quiz" component={LevelView} />
+              <Route exact path="/quiz/:level" component={QuizView} />
+              <Route exact path="/result" component={ResultView} />
             </Switch>
           </div>
         </Fragment>

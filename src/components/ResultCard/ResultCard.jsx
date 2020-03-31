@@ -7,7 +7,7 @@ import './style.scss'
 
 const ResultCard = ({ props }) => {
   const { index, question, answer, correctAnswer } = props
-  const isCorrect = answer && answer.text === correctAnswer.text
+  const isCorrect = answer && answer.id === correctAnswer.id
 
   const titleClass = isCorrect ? 'title right' : 'title wrong'
   const answerClass = isCorrect ? 'answer right' : 'answer wrong'

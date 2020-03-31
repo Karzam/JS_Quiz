@@ -22,7 +22,6 @@ type AggregateUser {
 type Answer {
   id: ID!
   text: String!
-  isCorrect: Boolean!
 }
 
 type AnswerConnection {
@@ -34,7 +33,6 @@ type AnswerConnection {
 input AnswerCreateInput {
   id: ID
   text: String!
-  isCorrect: Boolean
 }
 
 input AnswerCreateManyInput {
@@ -57,14 +55,11 @@ enum AnswerOrderByInput {
   id_DESC
   text_ASC
   text_DESC
-  isCorrect_ASC
-  isCorrect_DESC
 }
 
 type AnswerPreviousValues {
   id: ID!
   text: String!
-  isCorrect: Boolean!
 }
 
 input AnswerScalarWhereInput {
@@ -96,8 +91,6 @@ input AnswerScalarWhereInput {
   text_not_starts_with: String
   text_ends_with: String
   text_not_ends_with: String
-  isCorrect: Boolean
-  isCorrect_not: Boolean
   AND: [AnswerScalarWhereInput!]
   OR: [AnswerScalarWhereInput!]
   NOT: [AnswerScalarWhereInput!]
@@ -123,17 +116,14 @@ input AnswerSubscriptionWhereInput {
 
 input AnswerUpdateDataInput {
   text: String
-  isCorrect: Boolean
 }
 
 input AnswerUpdateInput {
   text: String
-  isCorrect: Boolean
 }
 
 input AnswerUpdateManyDataInput {
   text: String
-  isCorrect: Boolean
 }
 
 input AnswerUpdateManyInput {
@@ -150,7 +140,6 @@ input AnswerUpdateManyInput {
 
 input AnswerUpdateManyMutationInput {
   text: String
-  isCorrect: Boolean
 }
 
 input AnswerUpdateManyWithWhereNestedInput {
@@ -164,6 +153,13 @@ input AnswerUpdateOneInput {
   upsert: AnswerUpsertNestedInput
   delete: Boolean
   disconnect: Boolean
+  connect: AnswerWhereUniqueInput
+}
+
+input AnswerUpdateOneRequiredInput {
+  create: AnswerCreateInput
+  update: AnswerUpdateDataInput
+  upsert: AnswerUpsertNestedInput
   connect: AnswerWhereUniqueInput
 }
 
@@ -212,8 +208,6 @@ input AnswerWhereInput {
   text_not_starts_with: String
   text_ends_with: String
   text_not_ends_with: String
-  isCorrect: Boolean
-  isCorrect_not: Boolean
   AND: [AnswerWhereInput!]
   OR: [AnswerWhereInput!]
   NOT: [AnswerWhereInput!]
@@ -303,6 +297,7 @@ type Question {
   title: String!
   code: String!
   answers(where: AnswerWhereInput, orderBy: AnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Answer!]
+  correctAnswer: Answer!
 }
 
 type QuestionConnection {
@@ -317,6 +312,7 @@ input QuestionCreateInput {
   title: String!
   code: String!
   answers: AnswerCreateManyInput
+  correctAnswer: AnswerCreateOneInput!
 }
 
 input QuestionCreateOneInput {
@@ -370,6 +366,7 @@ input QuestionUpdateDataInput {
   title: String
   code: String
   answers: AnswerUpdateManyInput
+  correctAnswer: AnswerUpdateOneRequiredInput
 }
 
 input QuestionUpdateInput {
@@ -377,6 +374,7 @@ input QuestionUpdateInput {
   title: String
   code: String
   answers: AnswerUpdateManyInput
+  correctAnswer: AnswerUpdateOneRequiredInput
 }
 
 input QuestionUpdateManyMutationInput {
@@ -447,6 +445,7 @@ input QuestionWhereInput {
   answers_every: AnswerWhereInput
   answers_some: AnswerWhereInput
   answers_none: AnswerWhereInput
+  correctAnswer: AnswerWhereInput
   AND: [QuestionWhereInput!]
   OR: [QuestionWhereInput!]
   NOT: [QuestionWhereInput!]
@@ -586,7 +585,8 @@ type Subscription {
 type User {
   id: ID!
   email: String!
-  password: String!
+  name: String!
+  avatar: String!
 }
 
 type UserConnection {
@@ -598,7 +598,8 @@ type UserConnection {
 input UserCreateInput {
   id: ID
   email: String!
-  password: String!
+  name: String!
+  avatar: String!
 }
 
 type UserEdge {
@@ -611,14 +612,17 @@ enum UserOrderByInput {
   id_DESC
   email_ASC
   email_DESC
-  password_ASC
-  password_DESC
+  name_ASC
+  name_DESC
+  avatar_ASC
+  avatar_DESC
 }
 
 type UserPreviousValues {
   id: ID!
   email: String!
-  password: String!
+  name: String!
+  avatar: String!
 }
 
 type UserSubscriptionPayload {
@@ -641,12 +645,14 @@ input UserSubscriptionWhereInput {
 
 input UserUpdateInput {
   email: String
-  password: String
+  name: String
+  avatar: String
 }
 
 input UserUpdateManyMutationInput {
   email: String
-  password: String
+  name: String
+  avatar: String
 }
 
 input UserWhereInput {
@@ -678,20 +684,34 @@ input UserWhereInput {
   email_not_starts_with: String
   email_ends_with: String
   email_not_ends_with: String
-  password: String
-  password_not: String
-  password_in: [String!]
-  password_not_in: [String!]
-  password_lt: String
-  password_lte: String
-  password_gt: String
-  password_gte: String
-  password_contains: String
-  password_not_contains: String
-  password_starts_with: String
-  password_not_starts_with: String
-  password_ends_with: String
-  password_not_ends_with: String
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  avatar: String
+  avatar_not: String
+  avatar_in: [String!]
+  avatar_not_in: [String!]
+  avatar_lt: String
+  avatar_lte: String
+  avatar_gt: String
+  avatar_gte: String
+  avatar_contains: String
+  avatar_not_contains: String
+  avatar_starts_with: String
+  avatar_not_starts_with: String
+  avatar_ends_with: String
+  avatar_not_ends_with: String
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]

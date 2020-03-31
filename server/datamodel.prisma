@@ -9,13 +9,13 @@ type Question {
   level: Level! @default(value: BEGINNER)
   title: String!
   code: String!
-  answers: [Answer!]! @relation(link: TABLE)
+  answers: [Answer!]! @relation(name: "Answers", link: TABLE)
+  correctAnswer: Answer! @relation(name: "CorrectAnswer", link: TABLE)
 }
 
 type Answer {
   id: ID! @id
   text: String!
-  isCorrect: Boolean! @default(value: false)
 }
 
 type Result {
@@ -29,5 +29,6 @@ type Result {
 type User {
   id: ID! @id
   email: String! @unique
-  password: String!
+  name: String!
+  avatar: String!
 }

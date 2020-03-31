@@ -8,56 +8,29 @@
   justify-content: center;
 
   .wrapper {
-    margin-bottom: 10%;
+    @include card;
+    text-align: center;
+    padding: 48px;
+    width: fit-content;
+    margin: 0 auto;
 
-    .title {
-      display: block;
-      color: white;
-      font-size: 36px;
-      font-weight: 800;
-      margin-bottom: 24px;
-    }
-
-    .buttons {
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .level {
-      @include card;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    .button {
       cursor: pointer;
-      max-width: 340px;
-      user-select: none;
-      transition: all .2s ease-in-out;
       text-decoration: none;
-      color: black;
+      border: none;
+      color: white;
+      font-weight: 600;
+      background-color: black;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 18px;
 
       &:hover {
-        transform: scale(0.96);
-        color: $watergreen;
-      }
-
-      &:not(:last-child) {
-        margin-right: 24px;
+        background-color: $darkgrey;
       }
 
       .icon {
-        font-size: 32px;
-      }
-
-      .label {
-        margin: 12px 0 4px 0;
-        font-size: 20px;
-        font-weight: 800;
-      }
-
-      .description {
-        text-align: center;
-        font-size: 16px;
-        width: 60%;
+        margin-right: 12px;
       }
     }
   }
