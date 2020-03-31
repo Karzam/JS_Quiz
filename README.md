@@ -5,6 +5,9 @@ Built with React, Apollo Client, GraphQL Yoga &amp; Prisma
 ⌛ Project in progress 
 </br></br>
 
+### Home view:
+<img width="100%" src="/screenshots/home.jpg" alt="Home"></img></br>  
+
 ### Difficulty level selection:
 <img width="100%" src="/screenshots/level_selection.jpg" alt="Difficulty level selection"></img></br>  
 
