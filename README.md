@@ -1,8 +1,15 @@
-# JS_Quiz
-⏱️❓ Javascript quiz application with React, Apollo Client, GraphQL Yoga &amp; Prisma
+### ⏱️❓ JS Quiz - Javascript Quiz Application
 
-<div align="center">
-  <img width="80%" src="/screenshots/level_selection.jpg" alt="Difficulty level selection"></img></br>
-  <img width="80%" src="/screenshots/quiz.jpg" alt="Quiz"></img></br>
-  <img width="80%" src="/screenshots/results.jpg" alt="Results"></img>
-</div>
+Built with React, Apollo Client, GraphQL Yoga &amp; Prisma
+
+⌛ Project in progress 
+</br></br>
+
+### Difficulty level selection:
+<img width="100%" src="/screenshots/level_selection.jpg" alt="Difficulty level selection"></img></br>  
+
+### Quiz view:
+<img width="100%" src="/screenshots/quiz.jpg" alt="Quiz"></img></br>  
+
+### Results screen:
+<img width="100%" src="/screenshots/results.jpg" alt="Results"></img>
