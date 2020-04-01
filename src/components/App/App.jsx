@@ -11,6 +11,7 @@ import QuizView from '../views/QuizView/QuizView'
 import RedirectView from '../views/RedirectView/RedirectView'
 import ResultView from '../views/ResultView/ResultView'
 import './style.scss'
+import Auth from '../../utils/auth'
 
 const QUERY = loader('./query.gql')
 
@@ -19,10 +20,14 @@ const App = () => {
   const [user, setUser] = useState(null)
 
   useEffect(() => {
+    if (error) {
+      Auth.reset()
+    }
+
     if (data) {
       setUser({ ...data })
     }
-  }, [data])
+  }, [data, error])
 
   return (
     <Fragment>

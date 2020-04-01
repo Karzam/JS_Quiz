@@ -32,6 +32,7 @@ const Profile = ({ user }) => {
       { unwrapped &&
         <div className={`menu ${unwrapAnimation}`} onAnimationEnd={() => setUnwrapAnimation('')}>
           { name && <span className="name">{ name }</span> }
+
           <button className="sign">
             <FontAwesomeIcon icon={ user ? faSignOutAlt : faSignInAlt } />
             <span>{ user ? 'Sign out' : 'Sign in' }</span>

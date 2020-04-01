@@ -1,5 +1,6 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
+import Auth from '../../../utils/auth'
 import './style.scss'
 
 const HomeView = () => {
@@ -7,13 +8,22 @@ const HomeView = () => {
 
   const history = useHistory()
 
+  // Redirect to github auth if not signed in
+  const onQuizClick = () => {
+    if (!Auth.get()) {
+      return window.location = authLink
+    }
+
+    return history.push('/quiz')
+  }
+
   return (
     <div className="home-view">
       <div className="wrapper">
         <span className="title">{ 'Welcome!' }</span>
 
         <div className="buttons">
-          <button className="button" onClick={ () => history.push('/quiz')}>
+          <button className="button" onClick={ onQuizClick }>
             <span className="icon" role="img" aria-label="emoji">{ '❓' }</span>
             <span className="label">{ 'Quiz' }</span>
             <p className="description">{ 'Train with a new javascript quiz!' }</p>

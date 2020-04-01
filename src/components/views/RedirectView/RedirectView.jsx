@@ -33,7 +33,7 @@ const RedirectView = () => {
 
   return (
     <div className="redirect-view">
-      <span>{ 'Redirecting...' }</span>
+      <span>{ 'Logging in...' }</span>
 
       <GridSpinner size={60} color="white" loading={true} />
     </div>
