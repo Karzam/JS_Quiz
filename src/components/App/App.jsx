@@ -1,9 +1,12 @@
-import React, { Fragment, useState, useEffect } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import { Route, Switch, Link } from 'react-router-dom'
 import { useQuery } from '@apollo/react-hooks'
+import { useDispatch } from 'react-redux'
+import { setUser } from '../../stores/actions'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCode } from '@fortawesome/free-solid-svg-icons'
 import { loader } from 'graphql.macro'
+import Auth from '../../utils/auth'
 import HomeView from '../views/HomeView/HomeView'
 import LevelView from '../views/LevelView/LevelView'
 import Profile from '../common/Profile/Profile'
@@ -11,21 +14,20 @@ import QuizView from '../views/QuizView/QuizView'
 import RedirectView from '../views/RedirectView/RedirectView'
 import ResultView from '../views/ResultView/ResultView'
 import './style.scss'
-import Auth from '../../utils/auth'
 
 const QUERY = loader('./query.gql')
 
 const App = () => {
   const { data, error } = useQuery(QUERY)
-  const [user, setUser] = useState(null)
+  const dispatch = useDispatch()
 
   useEffect(() => {
     if (error) {
-      Auth.reset()
+      Auth.clear()
     }
 
     if (data) {
-      setUser({ ...data })
+      dispatch(setUser(data.me))
     }
   }, [data, error])
 
@@ -34,10 +36,10 @@ const App = () => {
       <nav>
         <Link className="wrapper" to={{ pathname: '/' }}>
           <FontAwesomeIcon className="icon" icon={ faCode } />
-          <span className="title">JS Quiz</span>
+          <span className="title">{ 'JS Quiz' }</span>
         </Link>
 
-        <Profile user={ user ? user.me : null } />
+        <Profile />
       </nav>
       <div className="view">
         <Switch>

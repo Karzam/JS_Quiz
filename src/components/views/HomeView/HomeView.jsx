@@ -1,17 +1,16 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
 import Auth from '../../../utils/auth'
+import { GITHUB_AUTH } from '../../../utils/urls'
 import './style.scss'
 
 const HomeView = () => {
-  const authLink = `https://github.com/login/oauth/authorize?client_id=305c5560839e1ccd8a95&scope=user`
-
   const history = useHistory()
 
   // Redirect to github auth if not signed in
   const onQuizClick = () => {
     if (!Auth.get()) {
-      return window.location = authLink
+      return window.location = GITHUB_AUTH
     }
 
     return history.push('/quiz')

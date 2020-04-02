@@ -2,6 +2,7 @@ mutation authorize($code: String!) {
   authorize(code: $code) {
     token
     user {
+      id
       email
       name
       avatar
