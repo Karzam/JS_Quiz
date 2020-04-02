@@ -1,6 +1,6 @@
 ### ⏱️❓ JS Quiz - Javascript Quiz Application
 
-Built with React, Apollo Client, GraphQL Yoga &amp; Prisma
+Built with React, Redux, Apollo Client, GraphQL Yoga &amp; Prisma
 
 ⌛ Project in progress 
 </br></br>
