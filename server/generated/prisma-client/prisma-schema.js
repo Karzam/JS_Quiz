@@ -15,6 +15,10 @@ type AggregateResult {
   count: Int!
 }
 
+type AggregateResultSet {
+  count: Int!
+}
+
 type AggregateUser {
   count: Int!
 }
@@ -246,10 +250,15 @@ type Mutation {
   deleteManyQuestions(where: QuestionWhereInput): BatchPayload!
   createResult(data: ResultCreateInput!): Result!
   updateResult(data: ResultUpdateInput!, where: ResultWhereUniqueInput!): Result
-  updateManyResults(data: ResultUpdateManyMutationInput!, where: ResultWhereInput): BatchPayload!
   upsertResult(where: ResultWhereUniqueInput!, create: ResultCreateInput!, update: ResultUpdateInput!): Result!
   deleteResult(where: ResultWhereUniqueInput!): Result
   deleteManyResults(where: ResultWhereInput): BatchPayload!
+  createResultSet(data: ResultSetCreateInput!): ResultSet!
+  updateResultSet(data: ResultSetUpdateInput!, where: ResultSetWhereUniqueInput!): ResultSet
+  updateManyResultSets(data: ResultSetUpdateManyMutationInput!, where: ResultSetWhereInput): BatchPayload!
+  upsertResultSet(where: ResultSetWhereUniqueInput!, create: ResultSetCreateInput!, update: ResultSetUpdateInput!): ResultSet!
+  deleteResultSet(where: ResultSetWhereUniqueInput!): ResultSet
+  deleteManyResultSets(where: ResultSetWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
@@ -285,6 +294,9 @@ type Query {
   result(where: ResultWhereUniqueInput!): Result
   results(where: ResultWhereInput, orderBy: ResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Result]!
   resultsConnection(where: ResultWhereInput, orderBy: ResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ResultConnection!
+  resultSet(where: ResultSetWhereUniqueInput!): ResultSet
+  resultSets(where: ResultSetWhereInput, orderBy: ResultSetOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ResultSet]!
+  resultSetsConnection(where: ResultSetWhereInput, orderBy: ResultSetOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ResultSetConnection!
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
@@ -457,8 +469,6 @@ input QuestionWhereUniqueInput {
 
 type Result {
   id: ID!
-  userId: ID!
-  dateTime: DateTime!
   question: Question!
   answer: Answer
 }
@@ -471,10 +481,13 @@ type ResultConnection {
 
 input ResultCreateInput {
   id: ID
-  userId: ID!
-  dateTime: DateTime!
   question: QuestionCreateOneInput!
   answer: AnswerCreateOneInput
+}
+
+input ResultCreateManyInput {
+  create: [ResultCreateInput!]
+  connect: [ResultWhereUniqueInput!]
 }
 
 type ResultEdge {
@@ -485,49 +498,102 @@ type ResultEdge {
 enum ResultOrderByInput {
   id_ASC
   id_DESC
+}
+
+type ResultPreviousValues {
+  id: ID!
+}
+
+input ResultScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  AND: [ResultScalarWhereInput!]
+  OR: [ResultScalarWhereInput!]
+  NOT: [ResultScalarWhereInput!]
+}
+
+type ResultSet {
+  id: ID!
+  userId: ID!
+  dateTime: DateTime!
+  results(where: ResultWhereInput, orderBy: ResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Result!]
+}
+
+type ResultSetConnection {
+  pageInfo: PageInfo!
+  edges: [ResultSetEdge]!
+  aggregate: AggregateResultSet!
+}
+
+input ResultSetCreateInput {
+  id: ID
+  userId: ID!
+  dateTime: DateTime!
+  results: ResultCreateManyInput
+}
+
+type ResultSetEdge {
+  node: ResultSet!
+  cursor: String!
+}
+
+enum ResultSetOrderByInput {
+  id_ASC
+  id_DESC
   userId_ASC
   userId_DESC
   dateTime_ASC
   dateTime_DESC
 }
 
-type ResultPreviousValues {
+type ResultSetPreviousValues {
   id: ID!
   userId: ID!
   dateTime: DateTime!
 }
 
-type ResultSubscriptionPayload {
+type ResultSetSubscriptionPayload {
   mutation: MutationType!
-  node: Result
+  node: ResultSet
   updatedFields: [String!]
-  previousValues: ResultPreviousValues
+  previousValues: ResultSetPreviousValues
 }
 
-input ResultSubscriptionWhereInput {
+input ResultSetSubscriptionWhereInput {
   mutation_in: [MutationType!]
   updatedFields_contains: String
   updatedFields_contains_every: [String!]
   updatedFields_contains_some: [String!]
-  node: ResultWhereInput
-  AND: [ResultSubscriptionWhereInput!]
-  OR: [ResultSubscriptionWhereInput!]
-  NOT: [ResultSubscriptionWhereInput!]
+  node: ResultSetWhereInput
+  AND: [ResultSetSubscriptionWhereInput!]
+  OR: [ResultSetSubscriptionWhereInput!]
+  NOT: [ResultSetSubscriptionWhereInput!]
 }
 
-input ResultUpdateInput {
+input ResultSetUpdateInput {
   userId: ID
   dateTime: DateTime
-  question: QuestionUpdateOneRequiredInput
-  answer: AnswerUpdateOneInput
+  results: ResultUpdateManyInput
 }
 
-input ResultUpdateManyMutationInput {
+input ResultSetUpdateManyMutationInput {
   userId: ID
   dateTime: DateTime
 }
 
-input ResultWhereInput {
+input ResultSetWhereInput {
   id: ID
   id_not: ID
   id_in: [ID!]
@@ -564,6 +630,83 @@ input ResultWhereInput {
   dateTime_lte: DateTime
   dateTime_gt: DateTime
   dateTime_gte: DateTime
+  results_every: ResultWhereInput
+  results_some: ResultWhereInput
+  results_none: ResultWhereInput
+  AND: [ResultSetWhereInput!]
+  OR: [ResultSetWhereInput!]
+  NOT: [ResultSetWhereInput!]
+}
+
+input ResultSetWhereUniqueInput {
+  id: ID
+}
+
+type ResultSubscriptionPayload {
+  mutation: MutationType!
+  node: Result
+  updatedFields: [String!]
+  previousValues: ResultPreviousValues
+}
+
+input ResultSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: ResultWhereInput
+  AND: [ResultSubscriptionWhereInput!]
+  OR: [ResultSubscriptionWhereInput!]
+  NOT: [ResultSubscriptionWhereInput!]
+}
+
+input ResultUpdateDataInput {
+  question: QuestionUpdateOneRequiredInput
+  answer: AnswerUpdateOneInput
+}
+
+input ResultUpdateInput {
+  question: QuestionUpdateOneRequiredInput
+  answer: AnswerUpdateOneInput
+}
+
+input ResultUpdateManyInput {
+  create: [ResultCreateInput!]
+  update: [ResultUpdateWithWhereUniqueNestedInput!]
+  upsert: [ResultUpsertWithWhereUniqueNestedInput!]
+  delete: [ResultWhereUniqueInput!]
+  connect: [ResultWhereUniqueInput!]
+  set: [ResultWhereUniqueInput!]
+  disconnect: [ResultWhereUniqueInput!]
+  deleteMany: [ResultScalarWhereInput!]
+}
+
+input ResultUpdateWithWhereUniqueNestedInput {
+  where: ResultWhereUniqueInput!
+  data: ResultUpdateDataInput!
+}
+
+input ResultUpsertWithWhereUniqueNestedInput {
+  where: ResultWhereUniqueInput!
+  update: ResultUpdateDataInput!
+  create: ResultCreateInput!
+}
+
+input ResultWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
   question: QuestionWhereInput
   answer: AnswerWhereInput
   AND: [ResultWhereInput!]
@@ -579,6 +722,7 @@ type Subscription {
   answer(where: AnswerSubscriptionWhereInput): AnswerSubscriptionPayload
   question(where: QuestionSubscriptionWhereInput): QuestionSubscriptionPayload
   result(where: ResultSubscriptionWhereInput): ResultSubscriptionPayload
+  resultSet(where: ResultSetSubscriptionWhereInput): ResultSetSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 

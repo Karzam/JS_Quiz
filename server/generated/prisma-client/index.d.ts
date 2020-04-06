@@ -19,6 +19,7 @@ export interface Exists {
   answer: (where?: AnswerWhereInput) => Promise<boolean>;
   question: (where?: QuestionWhereInput) => Promise<boolean>;
   result: (where?: ResultWhereInput) => Promise<boolean>;
+  resultSet: (where?: ResultSetWhereInput) => Promise<boolean>;
   user: (where?: UserWhereInput) => Promise<boolean>;
 }
 
@@ -98,6 +99,25 @@ export interface Prisma {
     first?: Int;
     last?: Int;
   }) => ResultConnectionPromise;
+  resultSet: (where: ResultSetWhereUniqueInput) => ResultSetNullablePromise;
+  resultSets: (args?: {
+    where?: ResultSetWhereInput;
+    orderBy?: ResultSetOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<ResultSet>;
+  resultSetsConnection: (args?: {
+    where?: ResultSetWhereInput;
+    orderBy?: ResultSetOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => ResultSetConnectionPromise;
   user: (where: UserWhereUniqueInput) => UserNullablePromise;
   users: (args?: {
     where?: UserWhereInput;
@@ -160,10 +180,6 @@ export interface Prisma {
     data: ResultUpdateInput;
     where: ResultWhereUniqueInput;
   }) => ResultPromise;
-  updateManyResults: (args: {
-    data: ResultUpdateManyMutationInput;
-    where?: ResultWhereInput;
-  }) => BatchPayloadPromise;
   upsertResult: (args: {
     where: ResultWhereUniqueInput;
     create: ResultCreateInput;
@@ -171,6 +187,22 @@ export interface Prisma {
   }) => ResultPromise;
   deleteResult: (where: ResultWhereUniqueInput) => ResultPromise;
   deleteManyResults: (where?: ResultWhereInput) => BatchPayloadPromise;
+  createResultSet: (data: ResultSetCreateInput) => ResultSetPromise;
+  updateResultSet: (args: {
+    data: ResultSetUpdateInput;
+    where: ResultSetWhereUniqueInput;
+  }) => ResultSetPromise;
+  updateManyResultSets: (args: {
+    data: ResultSetUpdateManyMutationInput;
+    where?: ResultSetWhereInput;
+  }) => BatchPayloadPromise;
+  upsertResultSet: (args: {
+    where: ResultSetWhereUniqueInput;
+    create: ResultSetCreateInput;
+    update: ResultSetUpdateInput;
+  }) => ResultSetPromise;
+  deleteResultSet: (where: ResultSetWhereUniqueInput) => ResultSetPromise;
+  deleteManyResultSets: (where?: ResultSetWhereInput) => BatchPayloadPromise;
   createUser: (data: UserCreateInput) => UserPromise;
   updateUser: (args: {
     data: UserUpdateInput;
@@ -205,6 +237,9 @@ export interface Subscription {
   result: (
     where?: ResultSubscriptionWhereInput
   ) => ResultSubscriptionPayloadSubscription;
+  resultSet: (
+    where?: ResultSetSubscriptionWhereInput
+  ) => ResultSetSubscriptionPayloadSubscription;
   user: (
     where?: UserSubscriptionWhereInput
   ) => UserSubscriptionPayloadSubscription;
@@ -236,7 +271,9 @@ export type QuestionOrderByInput =
   | "code_ASC"
   | "code_DESC";
 
-export type ResultOrderByInput =
+export type ResultOrderByInput = "id_ASC" | "id_DESC";
+
+export type ResultSetOrderByInput =
   | "id_ASC"
   | "id_DESC"
   | "userId_ASC"
@@ -373,6 +410,32 @@ export interface ResultWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
+  question?: Maybe<QuestionWhereInput>;
+  answer?: Maybe<AnswerWhereInput>;
+  AND?: Maybe<ResultWhereInput[] | ResultWhereInput>;
+  OR?: Maybe<ResultWhereInput[] | ResultWhereInput>;
+  NOT?: Maybe<ResultWhereInput[] | ResultWhereInput>;
+}
+
+export type ResultSetWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
+
+export interface ResultSetWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
   userId?: Maybe<ID_Input>;
   userId_not?: Maybe<ID_Input>;
   userId_in?: Maybe<ID_Input[] | ID_Input>;
@@ -395,11 +458,12 @@ export interface ResultWhereInput {
   dateTime_lte?: Maybe<DateTimeInput>;
   dateTime_gt?: Maybe<DateTimeInput>;
   dateTime_gte?: Maybe<DateTimeInput>;
-  question?: Maybe<QuestionWhereInput>;
-  answer?: Maybe<AnswerWhereInput>;
-  AND?: Maybe<ResultWhereInput[] | ResultWhereInput>;
-  OR?: Maybe<ResultWhereInput[] | ResultWhereInput>;
-  NOT?: Maybe<ResultWhereInput[] | ResultWhereInput>;
+  results_every?: Maybe<ResultWhereInput>;
+  results_some?: Maybe<ResultWhereInput>;
+  results_none?: Maybe<ResultWhereInput>;
+  AND?: Maybe<ResultSetWhereInput[] | ResultSetWhereInput>;
+  OR?: Maybe<ResultSetWhereInput[] | ResultSetWhereInput>;
+  NOT?: Maybe<ResultSetWhereInput[] | ResultSetWhereInput>;
 }
 
 export type UserWhereUniqueInput = AtLeastOne<{
@@ -608,8 +672,6 @@ export interface QuestionUpdateManyMutationInput {
 
 export interface ResultCreateInput {
   id?: Maybe<ID_Input>;
-  userId: ID_Input;
-  dateTime: DateTimeInput;
   question: QuestionCreateOneInput;
   answer?: Maybe<AnswerCreateOneInput>;
 }
@@ -620,8 +682,6 @@ export interface QuestionCreateOneInput {
 }
 
 export interface ResultUpdateInput {
-  userId?: Maybe<ID_Input>;
-  dateTime?: Maybe<DateTimeInput>;
   question?: Maybe<QuestionUpdateOneRequiredInput>;
   answer?: Maybe<AnswerUpdateOneInput>;
 }
@@ -655,7 +715,78 @@ export interface AnswerUpdateOneInput {
   connect?: Maybe<AnswerWhereUniqueInput>;
 }
 
-export interface ResultUpdateManyMutationInput {
+export interface ResultSetCreateInput {
+  id?: Maybe<ID_Input>;
+  userId: ID_Input;
+  dateTime: DateTimeInput;
+  results?: Maybe<ResultCreateManyInput>;
+}
+
+export interface ResultCreateManyInput {
+  create?: Maybe<ResultCreateInput[] | ResultCreateInput>;
+  connect?: Maybe<ResultWhereUniqueInput[] | ResultWhereUniqueInput>;
+}
+
+export interface ResultSetUpdateInput {
+  userId?: Maybe<ID_Input>;
+  dateTime?: Maybe<DateTimeInput>;
+  results?: Maybe<ResultUpdateManyInput>;
+}
+
+export interface ResultUpdateManyInput {
+  create?: Maybe<ResultCreateInput[] | ResultCreateInput>;
+  update?: Maybe<
+    | ResultUpdateWithWhereUniqueNestedInput[]
+    | ResultUpdateWithWhereUniqueNestedInput
+  >;
+  upsert?: Maybe<
+    | ResultUpsertWithWhereUniqueNestedInput[]
+    | ResultUpsertWithWhereUniqueNestedInput
+  >;
+  delete?: Maybe<ResultWhereUniqueInput[] | ResultWhereUniqueInput>;
+  connect?: Maybe<ResultWhereUniqueInput[] | ResultWhereUniqueInput>;
+  set?: Maybe<ResultWhereUniqueInput[] | ResultWhereUniqueInput>;
+  disconnect?: Maybe<ResultWhereUniqueInput[] | ResultWhereUniqueInput>;
+  deleteMany?: Maybe<ResultScalarWhereInput[] | ResultScalarWhereInput>;
+}
+
+export interface ResultUpdateWithWhereUniqueNestedInput {
+  where: ResultWhereUniqueInput;
+  data: ResultUpdateDataInput;
+}
+
+export interface ResultUpdateDataInput {
+  question?: Maybe<QuestionUpdateOneRequiredInput>;
+  answer?: Maybe<AnswerUpdateOneInput>;
+}
+
+export interface ResultUpsertWithWhereUniqueNestedInput {
+  where: ResultWhereUniqueInput;
+  update: ResultUpdateDataInput;
+  create: ResultCreateInput;
+}
+
+export interface ResultScalarWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  AND?: Maybe<ResultScalarWhereInput[] | ResultScalarWhereInput>;
+  OR?: Maybe<ResultScalarWhereInput[] | ResultScalarWhereInput>;
+  NOT?: Maybe<ResultScalarWhereInput[] | ResultScalarWhereInput>;
+}
+
+export interface ResultSetUpdateManyMutationInput {
   userId?: Maybe<ID_Input>;
   dateTime?: Maybe<DateTimeInput>;
 }
@@ -714,6 +845,23 @@ export interface ResultSubscriptionWhereInput {
   AND?: Maybe<ResultSubscriptionWhereInput[] | ResultSubscriptionWhereInput>;
   OR?: Maybe<ResultSubscriptionWhereInput[] | ResultSubscriptionWhereInput>;
   NOT?: Maybe<ResultSubscriptionWhereInput[] | ResultSubscriptionWhereInput>;
+}
+
+export interface ResultSetSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<ResultSetWhereInput>;
+  AND?: Maybe<
+    ResultSetSubscriptionWhereInput[] | ResultSetSubscriptionWhereInput
+  >;
+  OR?: Maybe<
+    ResultSetSubscriptionWhereInput[] | ResultSetSubscriptionWhereInput
+  >;
+  NOT?: Maybe<
+    ResultSetSubscriptionWhereInput[] | ResultSetSubscriptionWhereInput
+  >;
 }
 
 export interface UserSubscriptionWhereInput {
@@ -952,14 +1100,10 @@ export interface AggregateQuestionSubscription
 
 export interface Result {
   id: ID_Output;
-  userId: ID_Output;
-  dateTime: DateTimeOutput;
 }
 
 export interface ResultPromise extends Promise<Result>, Fragmentable {
   id: () => Promise<ID_Output>;
-  userId: () => Promise<ID_Output>;
-  dateTime: () => Promise<DateTimeOutput>;
   question: <T = QuestionPromise>() => T;
   answer: <T = AnswerPromise>() => T;
 }
@@ -968,8 +1112,6 @@ export interface ResultSubscription
   extends Promise<AsyncIterator<Result>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  userId: () => Promise<AsyncIterator<ID_Output>>;
-  dateTime: () => Promise<AsyncIterator<DateTimeOutput>>;
   question: <T = QuestionSubscription>() => T;
   answer: <T = AnswerSubscription>() => T;
 }
@@ -978,8 +1120,6 @@ export interface ResultNullablePromise
   extends Promise<Result | null>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  userId: () => Promise<ID_Output>;
-  dateTime: () => Promise<DateTimeOutput>;
   question: <T = QuestionPromise>() => T;
   answer: <T = AnswerPromise>() => T;
 }
@@ -1034,6 +1174,117 @@ export interface AggregateResultPromise
 
 export interface AggregateResultSubscription
   extends Promise<AsyncIterator<AggregateResult>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface ResultSet {
+  id: ID_Output;
+  userId: ID_Output;
+  dateTime: DateTimeOutput;
+}
+
+export interface ResultSetPromise extends Promise<ResultSet>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  userId: () => Promise<ID_Output>;
+  dateTime: () => Promise<DateTimeOutput>;
+  results: <T = FragmentableArray<Result>>(args?: {
+    where?: ResultWhereInput;
+    orderBy?: ResultOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+}
+
+export interface ResultSetSubscription
+  extends Promise<AsyncIterator<ResultSet>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  userId: () => Promise<AsyncIterator<ID_Output>>;
+  dateTime: () => Promise<AsyncIterator<DateTimeOutput>>;
+  results: <T = Promise<AsyncIterator<ResultSubscription>>>(args?: {
+    where?: ResultWhereInput;
+    orderBy?: ResultOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+}
+
+export interface ResultSetNullablePromise
+  extends Promise<ResultSet | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  userId: () => Promise<ID_Output>;
+  dateTime: () => Promise<DateTimeOutput>;
+  results: <T = FragmentableArray<Result>>(args?: {
+    where?: ResultWhereInput;
+    orderBy?: ResultOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+}
+
+export interface ResultSetConnection {
+  pageInfo: PageInfo;
+  edges: ResultSetEdge[];
+}
+
+export interface ResultSetConnectionPromise
+  extends Promise<ResultSetConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<ResultSetEdge>>() => T;
+  aggregate: <T = AggregateResultSetPromise>() => T;
+}
+
+export interface ResultSetConnectionSubscription
+  extends Promise<AsyncIterator<ResultSetConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<ResultSetEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateResultSetSubscription>() => T;
+}
+
+export interface ResultSetEdge {
+  node: ResultSet;
+  cursor: String;
+}
+
+export interface ResultSetEdgePromise
+  extends Promise<ResultSetEdge>,
+    Fragmentable {
+  node: <T = ResultSetPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface ResultSetEdgeSubscription
+  extends Promise<AsyncIterator<ResultSetEdge>>,
+    Fragmentable {
+  node: <T = ResultSetSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateResultSet {
+  count: Int;
+}
+
+export interface AggregateResultSetPromise
+  extends Promise<AggregateResultSet>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateResultSetSubscription
+  extends Promise<AsyncIterator<AggregateResultSet>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
@@ -1261,20 +1512,61 @@ export interface ResultSubscriptionPayloadSubscription
 
 export interface ResultPreviousValues {
   id: ID_Output;
-  userId: ID_Output;
-  dateTime: DateTimeOutput;
 }
 
 export interface ResultPreviousValuesPromise
   extends Promise<ResultPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  userId: () => Promise<ID_Output>;
-  dateTime: () => Promise<DateTimeOutput>;
 }
 
 export interface ResultPreviousValuesSubscription
   extends Promise<AsyncIterator<ResultPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+}
+
+export interface ResultSetSubscriptionPayload {
+  mutation: MutationType;
+  node: ResultSet;
+  updatedFields: String[];
+  previousValues: ResultSetPreviousValues;
+}
+
+export interface ResultSetSubscriptionPayloadPromise
+  extends Promise<ResultSetSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = ResultSetPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = ResultSetPreviousValuesPromise>() => T;
+}
+
+export interface ResultSetSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<ResultSetSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = ResultSetSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = ResultSetPreviousValuesSubscription>() => T;
+}
+
+export interface ResultSetPreviousValues {
+  id: ID_Output;
+  userId: ID_Output;
+  dateTime: DateTimeOutput;
+}
+
+export interface ResultSetPreviousValuesPromise
+  extends Promise<ResultSetPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  userId: () => Promise<ID_Output>;
+  dateTime: () => Promise<DateTimeOutput>;
+}
+
+export interface ResultSetPreviousValuesSubscription
+  extends Promise<AsyncIterator<ResultSetPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   userId: () => Promise<AsyncIterator<ID_Output>>;
@@ -1383,6 +1675,10 @@ export const models: Model[] = [
   },
   {
     name: "Result",
+    embedded: false
+  },
+  {
+    name: "ResultSet",
     embedded: false
   },
   {

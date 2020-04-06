@@ -1,8 +1,9 @@
 const { prisma } = require('./generated/prisma-client')
 const { GraphQLServer } = require('graphql-yoga')
 const { authenticate } = require('./middlewares/authenticate')
-const { newToken, extractTokenFromHeaders, decodeToken } = require('./utils/jwt')
+const { newToken } = require('./utils/jwt')
 const { requestGithubUser } = require('./utils/requestGithubUser')
+const { getUser } = require('./utils/auth')
 
 require('dotenv').config()
 
@@ -23,12 +24,43 @@ const FRAGMENT_QUESTION = `
   }
 `
 
+const FRAGMENT_RESULT_SET = `
+  fragment R on ResultSet {
+    id
+    userId
+    dateTime
+    results {
+      id
+      question {
+        id
+      }
+      answer {
+        id
+      }
+    }
+  }
+`
+
+const FRAGMENT_RESULT = `
+  fragment R on Result {
+    id
+    question {
+      id
+      correctAnswer {
+        id
+      }
+    }
+    answer {
+      id
+    }
+  }
+`
+
 const resolvers = {
   Query: {
     me(root, args, { prisma, req }) {
       try {
-        const token = extractTokenFromHeaders(req.headers)
-        const { user } = decodeToken(token)
+        const user = getUser(req)
 
         return prisma.user({ email: user.email })
       } catch (error) {
@@ -40,6 +72,18 @@ const resolvers = {
 
       return prisma.questions({ where: { level } }).$fragment(FRAGMENT_QUESTION)
     },
+    resultSets(root, args, { prisma, req }) {
+      const user = getUser(req)
+
+      return prisma.resultSets({ where: { userId: user.id } })
+    },
+    resultSet(root, { id }, { prisma, req }) {
+      if (!id) {
+        throw new Error('No passed arg id')
+      }
+
+      return prisma.resultSet({ id })
+    }
   },
   Mutation: {
     /**
@@ -67,29 +111,43 @@ const resolvers = {
       return { user: newUser, token: newToken({ user: newUser }) }
     },
     /**
-     * Save user answers in "Result" table
+     * Save user answers
      */
-    createResults(parent, args = {}, { prisma, req }) {
-      const token = extractTokenFromHeaders(req.headers)
-      const { user } = decodeToken(token)
+    createResultSet(parent, args = {}, { prisma, req }) {
+      const user = getUser(req)
       const { data } = args
       const dateTime = new Date()
 
-      return data.map(item => prisma.createResult({
-        userId: user.id,
-        dateTime,
+      const results = data.map(item => ({
         question: { connect: { id: item.questionId }},
         answer: item.answerId ? { connect: { id: item.answerId }} : {},
       }))
+
+      return prisma.createResultSet({
+        userId: user.id,
+        dateTime,
+        results: { create: results },
+      })
     },
   },
   Result: {
     question: parent => prisma.result({ id: parent.id }).question(),
     answer: parent => prisma.result({ id: parent.id }).answer(),
-    correctAnswer: async parent => prisma.result({ id: parent.id })
+    correctAnswer: parent => prisma.result({ id: parent.id })
       .question().$fragment(FRAGMENT_QUESTION)
       .correctAnswer(),
   },
+  ResultSet: {
+    results: parent => prisma.resultSet({ id: parent.id }).results().$fragment(FRAGMENT_RESULT),
+    correctAnswersCount: async parent => {
+      const results = await prisma.resultSet({ id: parent.id }).$fragment(FRAGMENT_RESULT_SET)
+        .results().$fragment(FRAGMENT_RESULT)
+
+      return results
+      .filter(r => r.answer && r.answer.id === r.question.correctAnswer.id)
+      .length
+    }
+  }
 }
 
 const server = new GraphQLServer({

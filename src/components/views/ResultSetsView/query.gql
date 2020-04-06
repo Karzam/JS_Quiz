@@ -1,0 +1,7 @@
+query resultSets {
+  resultSets {
+    id
+    dateTime
+    correctAnswersCount
+  }
+}

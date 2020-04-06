@@ -27,18 +27,24 @@ input ResultInput {
 
 type Result {
   id: ID!
-  userId: ID!
-  dateTime: DateTime!
   question: Question!
   answer: Answer
-  correctAnswer: Answer
+  correctAnswer: Answer!
+}
+
+type ResultSet {
+  id: ID!
+  userId: ID!
+  dateTime: DateTime!
+  results: [Result!]!
+  correctAnswersCount: Int!
 }
 
 type User {
   id: ID!
   email: String!
   name: String!
-  avatar: String!
+  avatar: String
 }
 
 type AuthPayload {
@@ -52,11 +58,13 @@ type Query {
   question(id: ID!): Question
   answer(id: ID!): Answer
   results: [Result!]
+  resultSets: [ResultSet!]
+  resultSet(id: ID!): ResultSet
   result(id: ID!): Result
   user(email: String!): User
 }
 
 type Mutation {
-  createResults(data: [ResultInput!]!): [Result!]!
+  createResultSet(data: [ResultInput!]!): ResultSet!
   authorize(code: String!): AuthPayload!
 }

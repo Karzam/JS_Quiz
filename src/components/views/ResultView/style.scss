@@ -1,30 +1,45 @@
+.loader {
+  display: flex;
+  justify-content: center;
+}
+
 .result-view {
   height: 100%;
 
-  .sup {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  .head {
+    margin-bottom: 36px;
 
-    .score {
+    .datetime {
       color: white;
-      font-size: 36px;
-      font-weight: 800;
-      margin-bottom: 36px;
-
-      > :first-child {
-        margin-right: 10px;
-      }
+      font-size: 16px;
+      font-weight: 600;
+      margin-left: 48px;
     }
 
-    .link {
-      color: white;
-      font-size: 20px;
-      font-weight: 800;
-      margin-bottom: 36px;
+    .sup {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
 
-      > :first-child {
-        margin-right: 10px;
+      .score {
+        color: white;
+        font-size: 36px;
+        font-weight: 800;
+
+        > :first-child {
+          margin-right: 10px;
+        }
+      }
+
+      .link {
+        color: white;
+        font-size: 20px;
+        font-weight: 800;
+        margin-bottom: 36px;
+
+        > :first-child {
+          margin-right: 10px;
+        }
       }
     }
   }

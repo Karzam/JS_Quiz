@@ -7,7 +7,7 @@ import { loader } from 'graphql.macro'
 import './style.scss'
 
 const QUERY = loader('./query.gql')
-const CREATE_RESULTS = loader('./createResults.gql')
+const CREATE_RESULT_SET = loader('./createResultSet.gql')
 
 const QuizView = (props) => {
   const Level = {
@@ -18,7 +18,7 @@ const QuizView = (props) => {
   
   const history = useHistory()
   const [transitionAnimation, setTransitionAnimation] = useState('transition')
-  const [createResults, { loading: mutating }] = useMutation(CREATE_RESULTS)
+  const [createResultSet, { loading: mutating }] = useMutation(CREATE_RESULT_SET)
 
 
   // Triggers transition animation
@@ -28,13 +28,15 @@ const QuizView = (props) => {
 
   // When completed, send answers to server and redirect to results
   const onEnd = async(answers) => {
-    const results = await createResults({
+    const results = await createResultSet({
       variables: {
         input: answers
       }
     })
-    
-    return history.replace('/result', { results: results.data.createResults })
+
+    const resultSetId = results.data.createResultSet.id
+
+    return history.replace(`/results/${resultSetId}`, { id: resultSetId })
   }
 
   const { loading, data } = useQuery(QUERY, {

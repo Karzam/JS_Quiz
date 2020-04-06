@@ -24,6 +24,7 @@
 
       .button {
         @include card;
+        @include bounce;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -37,11 +38,6 @@
         text-decoration: none;
         outline: none;
         color: black;
-
-        &:hover {
-          transform: scale(0.96);
-          color: $watergreen;
-        }
 
         &:not(:last-child) {
           margin-right: 24px;

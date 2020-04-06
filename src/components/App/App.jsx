@@ -12,6 +12,7 @@ import LevelView from '../views/LevelView/LevelView'
 import Profile from '../common/Profile/Profile'
 import QuizView from '../views/QuizView/QuizView'
 import RedirectView from '../views/RedirectView/RedirectView'
+import ResultSetsView from '../views/ResultSetsView/ResultSetsView'
 import ResultView from '../views/ResultView/ResultView'
 import './style.scss'
 
@@ -47,7 +48,8 @@ const App = () => {
           <Route exact path="/auth" component={ RedirectView } />
           <Route exact path="/quiz" component={ LevelView } />
           <Route exact path="/quiz/:level" component={ QuizView } />
-          <Route exact path="/result" component={ ResultView } />
+          <Route exact path="/results" component={ ResultSetsView } />
+          <Route exact path="/results/:id" component={ ResultView } />
         </Switch>
       </div>
     </Fragment>

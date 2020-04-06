@@ -3,17 +3,13 @@
 
 .answer-card {
   @include card;
+  @include bounce;
   cursor: pointer;
   font-family: 'Open Sans', sans-serif;
   margin: 24px;
   text-align: center;
   transition: all .2s ease-in-out;
   outline: none;
-
-  &:hover {
-    transform: scale(0.96);
-    color: $watergreen;
-  }
 
   .text {
     font-size: 18px;

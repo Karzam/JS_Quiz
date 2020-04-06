@@ -4,3 +4,10 @@
   border-radius: 12px;
   padding: 24px;
 }
+
+@mixin bounce {
+  &:hover {
+    transform: scale(0.96);
+    color: $watergreen;
+  }
+}

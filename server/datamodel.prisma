@@ -20,15 +20,20 @@ type Answer {
 
 type Result {
   id: ID! @id
-  userId: ID!
-  dateTime: DateTime!
   question: Question! @relation(link: TABLE)
   answer: Answer @relation(link: TABLE)
+}
+
+type ResultSet {
+  id: ID! @id
+  userId: ID!
+  dateTime: DateTime!
+  results: [Result!]! @relation(link: TABLE)
 }
 
 type User {
   id: ID! @id
   email: String! @unique
   name: String!
-  avatar: String!
+  avatar: String
 }

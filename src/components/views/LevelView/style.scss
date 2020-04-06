@@ -25,6 +25,7 @@
 
     .level {
       @include card;
+      @include bounce;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -37,11 +38,6 @@
       transition: all .2s ease-in-out;
       text-decoration: none;
       color: black;
-
-      &:hover {
-        transform: scale(0.96);
-        color: $watergreen;
-      }
 
       &:not(:last-child) {
         margin-right: 24px;

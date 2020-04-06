@@ -1,0 +1,5 @@
+mutation createResultSet($input: [ResultInput!]!) {
+  createResultSet(data: $input) {
+    id
+  }
+}

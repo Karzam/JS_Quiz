@@ -1,0 +1,22 @@
+query resultSet($id: ID!) {
+  resultSet(id: $id) {
+    id
+    dateTime
+    results {
+      id
+      question {
+        id
+        title
+        code
+      }
+      answer {
+        id
+        text
+      }
+      correctAnswer {
+        id
+        text
+      }
+    }
+  }
+}

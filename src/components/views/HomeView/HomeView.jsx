@@ -16,6 +16,14 @@ const HomeView = () => {
     return history.push('/quiz')
   }
 
+  const onResultsClick = () => {
+    if (!Auth.get()) {
+      return window.location = GITHUB_AUTH
+    }
+
+    return history.push('/results')
+  }
+
   return (
     <div className="home-view">
       <div className="wrapper">
@@ -28,7 +36,7 @@ const HomeView = () => {
             <p className="description">{ 'Train with a new javascript quiz!' }</p>
           </button>
 
-          <button className="button" onClick={ () => console.log('results') }>
+          <button className="button" onClick={ onResultsClick }>
             <span className="icon" role="img" aria-label="emoji">{ '📝' }</span>
             <span className="label">{ 'Results' }</span>
             <p className="description">{ 'See all your previous results' }</p>
