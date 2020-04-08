@@ -4,57 +4,11 @@ const { authenticate } = require('./middlewares/authenticate')
 const { newToken } = require('./utils/jwt')
 const { requestGithubUser } = require('./utils/requestGithubUser')
 const { getUser } = require('./utils/auth')
+const resultSetFragment = require('./fragments/resultSet')
+const resultFragment = require('./fragments/result')
+const questionFragment = require('./fragments/question')
 
 require('dotenv').config()
-
-const FRAGMENT_QUESTION = `
-  fragment Q on Question {
-    id
-    level
-    title
-    code
-    answers {
-      id
-      text
-    }
-    correctAnswer {
-      id
-      text
-    }
-  }
-`
-
-const FRAGMENT_RESULT_SET = `
-  fragment R on ResultSet {
-    id
-    userId
-    dateTime
-    results {
-      id
-      question {
-        id
-      }
-      answer {
-        id
-      }
-    }
-  }
-`
-
-const FRAGMENT_RESULT = `
-  fragment R on Result {
-    id
-    question {
-      id
-      correctAnswer {
-        id
-      }
-    }
-    answer {
-      id
-    }
-  }
-`
 
 const resolvers = {
   Query: {
@@ -70,7 +24,7 @@ const resolvers = {
     questions(root, args, { prisma }) {
       const level = args.level || 'INTERMEDIATE'
 
-      return prisma.questions({ where: { level } }).$fragment(FRAGMENT_QUESTION)
+      return prisma.questions({ where: { level } }).$fragment(questionFragment)
     },
     resultSets(root, args, { prisma, req }) {
       const user = getUser(req)
@@ -144,14 +98,14 @@ const resolvers = {
     question: parent => prisma.result({ id: parent.id }).question(),
     answer: parent => prisma.result({ id: parent.id }).answer(),
     correctAnswer: parent => prisma.result({ id: parent.id })
-      .question().$fragment(FRAGMENT_QUESTION)
+      .question().$fragment(questionFragment)
       .correctAnswer(),
   },
   ResultSet: {
-    results: parent => prisma.resultSet({ id: parent.id }).results().$fragment(FRAGMENT_RESULT),
+    results: parent => prisma.resultSet({ id: parent.id }).results().$fragment(resultFragment),
     correctAnswersCount: async parent => {
-      const results = await prisma.resultSet({ id: parent.id }).$fragment(FRAGMENT_RESULT_SET)
-        .results().$fragment(FRAGMENT_RESULT)
+      const results = await prisma.resultSet({ id: parent.id }).$fragment(resultSetFragment)
+        .results().$fragment(resultFragment)
 
       return results
       .filter(r => r.answer && r.answer.id === r.question.correctAnswer.id)
