@@ -795,7 +795,7 @@ export interface UserCreateInput {
   id?: Maybe<ID_Input>;
   email: String;
   name: String;
-  avatar: String;
+  avatar?: Maybe<String>;
 }
 
 export interface UserUpdateInput {
@@ -1293,7 +1293,7 @@ export interface User {
   id: ID_Output;
   email: String;
   name: String;
-  avatar: String;
+  avatar?: String;
 }
 
 export interface UserPromise extends Promise<User>, Fragmentable {
@@ -1602,7 +1602,7 @@ export interface UserPreviousValues {
   id: ID_Output;
   email: String;
   name: String;
-  avatar: String;
+  avatar?: String;
 }
 
 export interface UserPreviousValuesPromise

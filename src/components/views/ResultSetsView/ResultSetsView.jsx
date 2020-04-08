@@ -54,7 +54,7 @@ const ResultSetsView = () => {
         </Link>
       </div>
 
-      <div className="resultSets">
+      <div className="result-sets">
         { resultSetCards }
       </div>
     </div>

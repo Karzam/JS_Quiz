@@ -77,13 +77,23 @@ const resolvers = {
 
       return prisma.resultSets({ where: { userId: user.id } })
     },
-    resultSet(root, { id }, { prisma, req }) {
-      if (!id) {
-        throw new Error('No passed arg id')
-      }
-
+    resultSet(root, { id }, { prisma }) {
       return prisma.resultSet({ id })
-    }
+    },
+    async leaderboard(root, args, { prisma }) {
+      let byUser = {}
+      const resultSets = await prisma.resultSets()
+
+      resultSets.forEach(r => {
+        byUser[r.userId] = byUser[r.userId] ? ++byUser[r.userId] : 1
+      })
+
+      const ordered = Object.keys(byUser).sort((a, b) => byUser[b] - byUser[a])
+
+      return {
+        users: ordered.slice(0, 10).map(async id => await prisma.user({ id }))
+      }
+    },
   },
   Mutation: {
     /**

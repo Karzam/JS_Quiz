@@ -24,6 +24,10 @@ const HomeView = () => {
     return history.push('/results')
   }
 
+  const onLeaderboardClick = () => {
+    return history.push('/leaderboard')
+  }
+
   return (
     <div className="home-view">
       <div className="wrapper">
@@ -42,7 +46,7 @@ const HomeView = () => {
             <p className="description">{ 'See all your previous results' }</p>
           </button>
 
-          <button className="button" onClick={ () => console.log('leaderboard') }>
+          <button className="button" onClick={ onLeaderboardClick }>
             <span className="icon" role="img" aria-label="emoji">{ '🏆' }</span>
             <span className="label">{ 'Leaderboard' }</span>
             <p className="description">{ 'The best of the best players!' }</p>

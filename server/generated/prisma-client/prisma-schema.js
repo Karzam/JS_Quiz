@@ -730,7 +730,7 @@ type User {
   id: ID!
   email: String!
   name: String!
-  avatar: String!
+  avatar: String
 }
 
 type UserConnection {
@@ -743,7 +743,7 @@ input UserCreateInput {
   id: ID
   email: String!
   name: String!
-  avatar: String!
+  avatar: String
 }
 
 type UserEdge {
@@ -766,7 +766,7 @@ type UserPreviousValues {
   id: ID!
   email: String!
   name: String!
-  avatar: String!
+  avatar: String
 }
 
 type UserSubscriptionPayload {

@@ -1,0 +1,89 @@
+@import '../../../styles/_colors';
+@import '../../../styles/_mixins';
+
+.loader {
+  display: flex;
+  justify-content: center;
+}
+
+.leaderboard-view {
+  height: 100%;
+
+  .sup {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .label {
+      color: white;
+      font-size: 36px;
+      font-weight: 800;
+      margin-bottom: 36px;
+
+      > :first-child {
+        margin-right: 10px;
+      }
+    }
+
+    .link {
+      color: white;
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 36px;
+
+      > :first-child {
+        margin-right: 10px;
+      }
+    }
+  }
+
+  .leaderboard {
+    width: 100%;
+
+    .item {
+      @include card;
+      margin-bottom: 36px;
+      font-family: 'Open Sans', sans-serif;
+      display: flex;
+      align-items: center;
+      font-size: 18px;
+
+      .icon {
+        font-size: 24px;
+        width: 48px;
+
+        &.gold {
+          color: $gold;
+        }
+
+        &.silver {
+          color: $silver;
+        }
+
+        &.bronze {
+          color: $bronze;
+        }
+      }
+
+      .rank {
+        color: $darkgrey;
+        font-weight: 700;
+        font-size: 28px;
+        margin-right: 48px;
+      }
+
+      .avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 100%;
+        margin-right: 24px;
+      }
+
+      .name {
+        font-size: 18px;
+        font-weight: 600;
+        color: black;
+      }
+    }
+  }
+}

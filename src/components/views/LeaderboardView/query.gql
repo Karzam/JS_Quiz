@@ -1,0 +1,9 @@
+query leaderboard {
+  leaderboard {
+    users {
+      id
+      name
+      avatar
+    }
+  }
+}

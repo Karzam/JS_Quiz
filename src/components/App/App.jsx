@@ -14,6 +14,7 @@ import QuizView from '../views/QuizView/QuizView'
 import RedirectView from '../views/RedirectView/RedirectView'
 import ResultSetsView from '../views/ResultSetsView/ResultSetsView'
 import ResultView from '../views/ResultView/ResultView'
+import LeaderboardView from '../views/LeaderboardView/LeaderboardView'
 import './style.scss'
 
 const QUERY = loader('./query.gql')
@@ -50,6 +51,7 @@ const App = () => {
           <Route exact path="/quiz/:level" component={ QuizView } />
           <Route exact path="/results" component={ ResultSetsView } />
           <Route exact path="/results/:id" component={ ResultView } />
+          <Route exact path="/leaderboard" component={ LeaderboardView } />
         </Switch>
       </div>
     </Fragment>

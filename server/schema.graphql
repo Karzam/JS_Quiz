@@ -52,6 +52,10 @@ type AuthPayload {
   token: String!
 }
 
+type Leaderboard {
+  users: [User!]!
+}
+
 type Query {
   me: User
   questions(level: Level): [Question]!
@@ -62,6 +66,7 @@ type Query {
   resultSet(id: ID!): ResultSet
   result(id: ID!): Result
   user(email: String!): User
+  leaderboard: Leaderboard
 }
 
 type Mutation {

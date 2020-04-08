@@ -37,13 +37,15 @@
     }
   }
 
-  .resultSets {
+  .result-sets {
+    width: 100%;
+
     .item {
       @include card;
       @include bounce;
       cursor: pointer;
-      width: 100%;
       margin-bottom: 36px;
+      width: 100%;
       text-decoration: none;
       text-align: left;
       font-family: 'Open Sans', sans-serif;
